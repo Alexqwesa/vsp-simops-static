@@ -1,0 +1,55 @@
+name: Deploy SIMOPS Static Site
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repo
+        uses: actions/checkout@v6
+        with:
+          repository: Alexqwesa/vsp_dsno
+          ref: antoan
+          path: src
+          # vsp_dsno is private
+          token: ${{ secrets.VSP_DSNO_PAT }}
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        working-directory: src/vsp_dsno_flutter
+        run: flutter pub get
+
+      - name: Build Flutter web (static site flavor)
+        working-directory: src/vsp_dsno_flutter
+        run: >
+          flutter build web
+          --release
+          --target lib/main_static_site.dart
+          --base-href /vsp-simops-static/
+          --dart-define=BUILD_NUMBER=${{ github.run_number }}
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: src/vsp_dsno_flutter/build/web
+          publish_branch: gh-pages
+          force_orphan: true
