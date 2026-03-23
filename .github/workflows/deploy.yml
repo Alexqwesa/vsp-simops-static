@@ -7,14 +7,16 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
-  group: pages-${{ github.ref }}
+  group: pages
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +26,6 @@ jobs:
           repository: Alexqwesa/vsp_dsno
           ref: antoan
           path: src
-          # vsp_dsno is private
           token: ${{ secrets.VSP_DSNO_PAT }}
 
       - name: Set up Flutter
@@ -33,11 +34,14 @@ jobs:
           channel: stable
           cache: true
 
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
       - name: Install dependencies
         working-directory: src/vsp_dsno_flutter
         run: flutter pub get
 
-      - name: Build Flutter web (static site flavor)
+      - name: Build Flutter web
         working-directory: src/vsp_dsno_flutter
         run: >
           flutter build web
@@ -46,10 +50,19 @@ jobs:
           --base-href /vsp-simops-static/
           --dart-define=BUILD_NUMBER=${{ github.run_number }}
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: src/vsp_dsno_flutter/build/web
-          publish_branch: gh-pages
-          force_orphan: true
+          path: src/vsp_dsno_flutter/build/web
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
