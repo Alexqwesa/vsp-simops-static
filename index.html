@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="/vsp-simops-static/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="vsp_dsno_flutter">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>vsp_dsno_flutter</title>
+  <link rel="manifest" href="manifest.json">
+
+</head>
+<body>
+  <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #0e1514;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .loader-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+      .kt-text {
+          font-size: 10vw; /* Size relative to viewport width */
+          font-weight: bold;
+          color: #ffffff;
+          position: relative;
+          z-index: 2;
+      }
+
+      .bracket {
+          position: absolute;
+          font-size: 12vw; /* Adjusted relative to viewport width */
+          color: #888888;
+          animation: pulseOut 1.5s infinite ease-in-out;
+          opacity: 0;
+      }
+
+
+        .bracket.left {
+            left: -8vw;
+        }
+
+        .bracket.right {
+            right: -8vw;
+        }
+
+        @keyframes pulseOut {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 0.1;
+            }
+            100% {
+                transform: scale(1.6);
+                opacity: 0;
+            }
+        }
+
+
+
+  #ck-preloader {
+    position: fixed; inset: 0; background: #0b0b0f; color: #eee;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 99999; font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  }
+  #ck-title { margin-bottom: 12px; opacity: .9; }
+  #ck-bar {
+    width: min(420px, 80vw); height: 8px; background: #222; border-radius: 999px; overflow: hidden;
+    box-shadow: inset 0 0 0 1px #333;
+  }
+  #ck-fill { height: 100%; width: 0%; background: #4da3ff; transition: width .15s linear; }
+  #ck-sub { margin-top: 10px; font-size: 12px; color:#aaa; }
+  .ck-hide { display: none !important; }
+
+  </style>
+
+<script src="flutter_bootstrap.js" defer></script>
+
+<!--  <script src="flutter_bootstrap.js" async></script>-->
+</body>
+</html>
