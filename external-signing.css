@@ -1,0 +1,11 @@
+:root { font: 16px/1.5 system-ui, sans-serif; color-scheme: light dark; }
+body { margin: 0; }
+main { max-width: 1050px; margin: auto; padding: 24px; }
+h1 { margin-top: 0; }
+section, details { border: 1px solid #8886; padding: 16px; border-radius: 8px; margin: 16px 0; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+th, td { border: 1px solid #8886; padding: 8px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+button { padding: 12px 20px; font: inherit; cursor: pointer; margin: 4px; }
+button:disabled { cursor: default; }
+#status { white-space: pre-wrap; }

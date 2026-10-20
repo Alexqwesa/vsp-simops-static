@@ -2,19 +2,81 @@
 <html>
 <head>
   <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
   -->
   <base href="/vsp-simops-static/">
+  <script>
+    // This page can be opened either from:
+    //   /index.html  - sideload latest
+    //   /version/<build>/index.html - no updates
+    (() => {
+      const defaultBuildVersion = '__DEFAULT_BUILD_VERSION__';
+
+      function normalizeDir(path) {
+        if (!path) {
+          return '/';
+        }
+        return path.endsWith('/') ? path : `${path}/`;
+      }
+
+      function detectVersionBase() {
+        const path = window.location.pathname || '/';
+        const match = path.match(/^(.*\/version\/[^/?#]+)(?:\/|$)/);
+        return match ? normalizeDir(match[1]) : null;
+      }
+
+      const versionBase = detectVersionBase();
+      const isDebugDevServer = defaultBuildVersion.startsWith('__DEFAULT_BUILD_');
+
+      // If the page itself is opened from /version/<build>/, load assets from
+      // that same version directory and make Flutter's base href that directory.
+      // Otherwise this is root app mode: keep Flutter routes rooted at /, but
+      // always load immutable build files from /version/<defaultBuildVersion>/.
+      const appBase = versionBase || '/';
+      // In Flutter web debug (`flutter run -d chrome`), `__DEFAULT_BUILD_VERSION__` is not
+      // replaced and the dev server doesn't serve `/version/<build>/...` assets.
+      // Fall back to the standard debug boot flow in that case.
+      const assetBase = versionBase
+        ? normalizeDir(versionBase)
+        : (isDebugDevServer ? '/' : normalizeDir(`/version/${defaultBuildVersion}`));
+
+      const base = document.querySelector('base') || document.createElement('base');
+      base.setAttribute('href', appBase);
+      if (!base.parentNode) {
+        document.head.prepend(base);
+      }
+
+      window.__vspAppBase = appBase;
+      window.__vspAssetBase = assetBase;
+      window.__vspVersionPinned = !!versionBase;
+      window.__vspDebugBoot = isDebugDevServer && !versionBase;
+      window.vspAssetUrl = function(relativePath) {
+        const cleanPath = String(relativePath || '').replace(/^\/+/, '');
+        return new URL(cleanPath, window.location.origin + assetBase).toString();
+      };
+
+      window.vspLoadScript = function(relativePath) {
+        const script = document.createElement('script');
+        script.src = window.vspAssetUrl(relativePath);
+        script.async = false;
+        document.body.appendChild(script);
+      };
+
+      window.vspAddLink = function(rel, href, attrs) {
+        const link = document.createElement('link');
+        link.rel = rel;
+        link.href = window.vspAssetUrl(href);
+        for (const [key, value] of Object.entries(attrs || {})) {
+          link.setAttribute(key, value);
+        }
+        document.head.appendChild(link);
+      };
+
+      window.vspAddLink('apple-touch-icon', 'icons/Icon-192.png');
+      window.vspAddLink('icon', 'favicon.png', { type: 'image/png' });
+      window.vspAddLink('manifest', 'manifest.json');
+    })();
+  </script>
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -24,13 +86,98 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="vsp_dsno_flutter">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
 
   <title>vsp_dsno_flutter</title>
-  <link rel="manifest" href="manifest.json">
+  <script>
+    // TEMPORARY: clear old Flutter service workers and caches once.
+    (async () => {
+      try {
+        if (window.sessionStorage.getItem("flutter_sw_cleanup_done") === "1") {
+          return;
+        }
+        if ("serviceWorker" in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          for (const reg of regs) {
+            try {
+              await reg.unregister();
+            } catch (e) {
+              console.error("SW unregister failed", e);
+            }
+          }
+        }
+
+        if (window.caches) {
+          const keys = await caches.keys();
+          for (const key of keys) {
+            try {
+              await caches.delete(key);
+            } catch (e) {
+              console.error("Cache delete failed", e);
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Cleanup error", e);
+      } finally {
+        window.sessionStorage.setItem("flutter_sw_cleanup_done", "1");
+      }
+    })();
+  </script>
+  <script>
+    // Accept the bootstrap payload from the parent page after the iframe loads.
+    // The Dart bootstrap bridge consumes this without a reload.
+      (() => {
+      const messageType = 'svodka-bootstrap-token';
+      const queueKey = '__svodkaBootstrapQueue';
+
+      function referrerOrigin() {
+        try {
+          return document.referrer ? new URL(document.referrer).origin : null;
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function enqueue(payload) {
+        const serialized = JSON.stringify(payload);
+        const existing = sessionStorage.getItem(queueKey);
+        const queue = existing ? JSON.parse(existing) : [];
+        queue.push(serialized);
+        sessionStorage.setItem(queueKey, JSON.stringify(queue));
+      }
+
+      window.addEventListener('message', (event) => {
+        const data = event.data;
+        if (!data || data.type !== messageType) {
+          return;
+        }
+
+        if (event.source !== window.parent) {
+          return;
+        }
+
+        const allowedOrigin = referrerOrigin();
+        if (allowedOrigin && event.origin !== allowedOrigin) {
+          return;
+        }
+
+        const token = typeof data.token === 'string' ? data.token.trim() : '';
+        const anon = data.anon === true;
+
+        if (!anon && !token) {
+          return;
+        }
+
+        enqueue({
+          type: data.type,
+          token: token,
+          anon: anon,
+        });
+      });
+    })();
+  </script>
 
 </head>
 <body>
@@ -112,8 +259,45 @@
 
   </style>
 
-<script src="flutter_bootstrap.js" defer></script>
+<script>
+  // Root sideload: optional hardUpdate preflight (see app_update.js for cache discard + background reload).
+  (async function vspBoot() {
+    if (!window.__vspDebugBoot && !window.__vspVersionPinned) {
+      try {
+        const res = await fetch("/latest.json", { cache: "no-store" });
+        if (res.ok) {
+          const latest = await res.json();
+          if (latest && latest.hardUpdate === true) {
+            localStorage.removeItem("flutter.lastGoodManifest");
+            localStorage.removeItem("flutter.nextManifest");
+            if (latest.base) {
+              const base = latest.base.endsWith("/") ? latest.base : `${latest.base}/`;
+              window.__vspAssetBase = base;
+              window.vspAssetUrl = function (relativePath) {
+                const clean = String(relativePath || "").replace(/^\/+/, "");
+                return new URL(clean, window.location.origin + base).toString();
+              };
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("hardUpdate preflight failed", e);
+      }
+    }
 
-<!--  <script src="flutter_bootstrap.js" async></script>-->
+    if (window.__vspDebugBoot) {
+      const s = document.createElement("script");
+      s.src = "main.dart.js";
+      s.defer = true;
+      document.body.appendChild(s);
+      return;
+    }
+
+    window.vspLoadScript("boot_download_helpers.js");
+    window.vspLoadScript("app_update.js");
+  })();
+</script>
+
+
 </body>
 </html>

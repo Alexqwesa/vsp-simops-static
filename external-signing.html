@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>SIMOPS approval</title>
+  <link rel="stylesheet" href="external-signing.css">
+  <script src="external-signing.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1 data-aloc="SIMOPS secure signing|Ký SIMOPS an toàn|Безопасное подписание SIMOPS">SIMOPS</h1>
+    <p data-aloc="Review the request and confirm with your passkey. SIMOPS verifies the result on the local network.|Xem yêu cầu và xác nhận bằng passkey. SIMOPS xác minh kết quả trên mạng nội bộ.|Просмотрите запрос и подтвердите ключом. SIMOPS проверит результат в локальной сети."></p>
+    <p id="summary" role="status" data-aloc="Reading invitation…|Đang đọc lời mời…|Чтение приглашения…"></p>
+    <section id="document" aria-label="SIMOPS document"></section>
+    <details id="rawDetails"><summary data-aloc="Complete document data|Toàn bộ dữ liệu tài liệu|Полные данные документа"></summary><pre id="raw"></pre></details>
+    <p><label><input id="reviewed" type="checkbox" disabled> <span id="consent"></span></label></p>
+    <button id="confirm" disabled data-aloc="Confirm with passkey|Xác nhận bằng passkey|Подтвердить ключом"></button>
+    <button id="download" hidden data-aloc="Download response|Tải phản hồi|Скачать ответ"></button>
+    <p id="status" role="status" aria-live="polite"></p>
+    <p data-aloc="The request remains pending until SIMOPS verifies the response. Opening this link does not approve anything.|Yêu cầu chờ xử lý cho tới khi SIMOPS xác minh phản hồi. Mở liên kết không phê duyệt bất cứ điều gì.|Запрос ожидает проверки ответа в SIMOPS. Открытие ссылки ничего не подтверждает."></p>
+    <p><a href="external-register.html" data-aloc="Register as an external signer|Đăng ký người ký ngoài VSP|Регистрация внешнего подписанта"></a></p>
+    <p><a href="external-register.html" data-aloc="Register as an external signer|Đăng ký người ký ngoài VSP|Регистрация внешнего подписанта"></a></p>
+  </main>
+</body>
+</html>
