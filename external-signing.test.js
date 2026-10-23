@@ -7,6 +7,8 @@ const path = require('node:path');
 const vm = require('node:vm');
 const { signingBytes, signingBase64, signingCanonical } = require('./external-signing.js');
 const { authorizationChallenge, aloc } = require('./external-signing.js');
+const { compactRequestUrl, readRequestFragment } = require('./external-signing.js');
+const qrcode = require('./qrcode.js');
 
 test('base64url transports a UTF-8 SIMOPS document without padding', () => {
   const bytes = new TextEncoder().encode('SIMOPS: công việc / работа');
@@ -16,9 +18,13 @@ test('base64url transports a UTF-8 SIMOPS document without padding', () => {
 });
 test('key-change authorization cannot be substituted with new-key possession', async () => {
   const challenge = 'document-and-action-bound-challenge';
-  const authorization = await authorizationChallenge(challenge);
+  const credentialId = 'new-credential';
+  const publicKey = { kty: 'EC', crv: 'P-256', x: 'x', y: 'y' };
+  const authorization = await authorizationChallenge(challenge, credentialId, publicKey);
   assert.notEqual(authorization, challenge);
-  assert.equal(authorization, crypto.createHash('sha256').update(`authorize:${challenge}`).digest('base64url'));
+  assert.equal(authorization, crypto.createHash('sha256').update(`authorize:${challenge}:${signingCanonical({ credentialId, publicKey })}`).digest('base64url'));
+  assert.notEqual(authorization, await authorizationChallenge(challenge, 'attacker-key', publicKey));
+  assert.notEqual(authorization, await authorizationChallenge(challenge, credentialId, { ...publicKey, x: 'other' }));
 });
 test('aloc selects a localized message rather than exposing pipe-separated text', () => {
   assert(['Secure sign', 'Ký an toàn', 'Подписать безопасно'].includes(aloc('Secure sign|Ký an toàn|Подписать безопасно')));
@@ -33,11 +39,35 @@ test('canonical request digest binds document, version, slot, signer, action and
   }
 });
 
+test('large document invitation compresses into a scannable QR and restores exactly', async () => {
+  const request = { v: 1, kind: 'approve', document: { operations: Array.from({ length: 45 }, (_, i) => ({
+    id: i, title: `Operation ${i}`, notes: 'Review isolation and permit controls before work begins.'
+  })) } };
+  const original = `https://alexqwesa.github.io/vsp-simops-static/external-signing.html#request=${signingBase64(new TextEncoder().encode(JSON.stringify(request)))}`;
+  assert(original.length > 2400);
+  const compact = await compactRequestUrl(original);
+  assert(compact.length < original.length);
+  const qr = qrcode(0, 'M');
+  qr.addData(compact);
+  assert.doesNotThrow(() => qr.make());
+  assert.deepEqual(await readRequestFragment(new URL(compact).hash), request);
+  assert.deepEqual(await readRequestFragment(new URL(original).hash), request);
+});
+
 test('login asks for an existing key only after explicit consent and returns no approval', async () => {
   const handlers = new Map();
   const elements = new Map();
   const element = id => {
-    if (!elements.has(id)) elements.set(id, { checked: false, append() {}, addEventListener(name, callback) { handlers.set(`${id}:${name}`, callback); } });
+    if (!elements.has(id)) {
+      elements.set(id, {
+        checked: false,
+        hidden: false,
+        disabled: false,
+        textContent: '',
+        append() {},
+        addEventListener(name, callback) { handlers.set(`${id}:${name}`, callback); },
+      });
+    }
     return elements.get(id);
   };
   const request = {v: 1, flow: 'login', kind: 'login', requestId: 42, signerId: 7, nonce: 'random',
@@ -47,8 +77,8 @@ test('login asks for an existing key only after explicit consent and returns no 
   let assertions = 0, registrations = 0, posted;
   await vm.runInNewContext(fs.readFileSync(path.join(__dirname, 'external-signing.js'), 'utf8'), {
     document: {documentElement: {}, querySelectorAll: () => [], getElementById: element},
-    location: {hash: '#request=' + Buffer.from(JSON.stringify(request)).toString('base64url'), origin: request.origin, hostname: request.rpId},
-    navigator: {language: 'en', credentials: {
+    location: {hash: '#request=' + Buffer.from(JSON.stringify(request)).toString('base64url'), origin: request.origin, hostname: request.rpId, href: 'https://alexqwesa.github.io/external-signing.html#x'},
+    navigator: {language: 'en', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)', credentials: {
       async create() { registrations++; throw new Error('Login must not enroll'); },
       async get(options) { assertions++; assert.equal(options.publicKey.userVerification, 'required');
         return {rawId: new TextEncoder().encode('test'), response: {clientDataJSON: new Uint8Array([1]), authenticatorData: new Uint8Array([2]), signature: new Uint8Array([3])}}; },
