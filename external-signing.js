@@ -58,6 +58,16 @@ const readRequestFragment = async hash => {
   for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
   return JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
 };
+const buildStaticViewerUrl = (request, signingPageUrl) => {
+  if (!request?.document || typeof request.document !== 'object' || Array.isArray(request.document)) return null;
+  // The signing invitation is bound to the server's operational document.
+  // The viewer gets only that document, never signer rows or evidence.
+  const { signs, signGroups, fullSimopsSignSnapshot, links, ...set } = request.document;
+  const viewerSet = { ...set, createdBy: 1, updatedBy: 1, status: 2, signs: [], signGroups: [] };
+  const viewerUrl = new URL('./', signingPageUrl);
+  viewerUrl.hash = `d=${signingBase64(new TextEncoder().encode(JSON.stringify({ set: viewerSet })))}&transient=1`;
+  return viewerUrl.href;
+};
 const slugName = value => String(value || '')
   .normalize('NFKD')
   .replace(/[^\w.-]+/g, '-')
@@ -70,7 +80,7 @@ const isPhoneBrowser = () => {
   if (/Android|iPhone|iPad|iPod/i.test(ua)) return true;
   return false;
 };
-if (typeof module !== 'undefined') module.exports = { signingBytes, signingBase64, signingCanonical, aloc, authorizationChallenge, compactRequestUrl, readRequestFragment, slugName, isPhoneBrowser };
+if (typeof module !== 'undefined') module.exports = { signingBytes, signingBase64, signingCanonical, aloc, authorizationChallenge, compactRequestUrl, readRequestFragment, buildStaticViewerUrl, slugName, isPhoneBrowser };
 
 if (typeof document !== 'undefined') (async () => {
   const element = id => document.getElementById(id);
@@ -219,6 +229,7 @@ if (typeof document !== 'undefined') (async () => {
     }
     const selfService = request.flow === 'selfService';
     const adding = ['enroll', 'add', 'replace', 'recover'].includes(request.kind);
+    const requiresEula = ['enroll', 'add', 'replace', 'recover'].includes(request.kind);
     const needsExistingOnSameDevice = selfService && ['add', 'replace', 'recover'].includes(request.kind);
     const explanations = {
       login: 'Sign in to your approved external account with your passkey. This does not approve any SIMOPS. Each document requires a separate passkey confirmation.|Đăng nhập tài khoản bên ngoài đã được phê duyệt bằng passkey. Thao tác này không phê duyệt SIMOPS. Mỗi tài liệu cần xác nhận riêng bằng passkey.|Войдите в согласованную внешнюю учётную запись ключом доступа. Это не подписывает SIMOPS. Для каждого документа требуется отдельное подтверждение ключом.',
@@ -280,29 +291,19 @@ if (typeof document !== 'undefined') (async () => {
     };
     refreshDynamic();
 
-    if (request.document) {
-      const heading = document.createElement('h2'); heading.textContent = `${request.document.name} · ${request.document.day}`; element('document').append(heading);
-      const comment = document.createElement('p'); comment.textContent = request.document.comment || ''; element('document').append(comment);
-      for (const [title, rows, columns] of [
-        ['Operations|Công việc|Операции', request.document.operations || [], ['id', 'title', 'startAt', 'endAt', 'workType', 'workBy', 'notes', 'permit', 'jsa']],
-        ['Conflicts and controls|Xung đột và biện pháp|Конфликты и меры', request.document.conflicts || [], ['operationAId', 'operationBId', 'level', 'resolved', 'resolutionNotes', 'riskNotes']],
-      ]) {
-        const h = document.createElement('h3'); h.textContent = aloc(title); element('document').append(h);
-        const table = document.createElement('table'); const header = table.insertRow();
-        const labels = { id: 'ID|Mã|ID', title: 'Title|Tên|Название', startAt: 'Start|Bắt đầu|Начало', endAt: 'End|Kết thúc|Окончание', workType: 'Work type|Loại công việc|Тип работ', workBy: 'Responsible unit|Đơn vị thực hiện|Исполнитель', notes: 'Notes|Ghi chú|Примечания', permit: 'Permit|Giấy phép|Разрешение', jsa: 'JSA|JSA|JSA', operationAId: 'Operation A|Công việc A|Операция A', operationBId: 'Operation B|Công việc B|Операция B', level: 'Risk level|Mức rủi ro|Уровень риска', resolved: 'Resolved|Đã xử lý|Устранён', resolutionNotes: 'Controls|Biện pháp|Меры', riskNotes: 'Risk notes|Ghi chú rủi ro|Примечания о риске' };
-        for (const key of columns) { const th = document.createElement('th'); th.textContent = aloc(labels[key]); header.append(th); }
-        for (const row of rows) { const tr = table.insertRow(); for (const key of columns) { const v = row[key]; tr.insertCell().textContent = v == null ? '' : typeof v === 'object' ? JSON.stringify(v) : String(v); } }
-        element('document').append(table);
-      }
-      element('raw').textContent = JSON.stringify(request.document, null, 2);
-    } else {
-      element('document').hidden = true;
-      element('rawDetails').hidden = true;
+    const viewerUrl = buildStaticViewerUrl(request, location.href);
+    if (viewerUrl) {
+      element('document').hidden = false;
+      element('simopsViewer').src = viewerUrl;
+      element('openSimopsViewer').href = viewerUrl;
     }
 
     element('reviewed').disabled = false;
+    if (element('eulaRow')) element('eulaRow').hidden = !requiresEula;
+    if (element('eula')) element('eula').disabled = !requiresEula;
     const setActionEnabled = () => {
-      const ready = !busy && element('reviewed').checked && !responseFile;
+      const eulaOk = !requiresEula || (element('eula') && element('eula').checked);
+      const ready = !busy && element('reviewed').checked && eulaOk && !responseFile;
       element('confirm').disabled = !ready;
       if (element('createDevice')) element('createDevice').disabled = !ready;
       if (element('openAndroid')) element('openAndroid').disabled = !ready;
@@ -310,6 +311,7 @@ if (typeof document !== 'undefined') (async () => {
       updateChrome();
     };
     element('reviewed').addEventListener('change', setActionEnabled);
+    if (element('eula')) element('eula').addEventListener('change', setActionEnabled);
     element('download').addEventListener('click', download);
     setActionEnabled();
 

@@ -8,6 +8,7 @@ const vm = require('node:vm');
 const { signingBytes, signingBase64, signingCanonical } = require('./external-signing.js');
 const { authorizationChallenge, aloc } = require('./external-signing.js');
 const { compactRequestUrl, readRequestFragment } = require('./external-signing.js');
+const { buildStaticViewerUrl } = require('./external-signing.js');
 const qrcode = require('./qrcode.js');
 
 test('base64url transports a UTF-8 SIMOPS document without padding', () => {
@@ -52,6 +53,33 @@ test('large document invitation compresses into a scannable QR and restores exac
   assert.doesNotThrow(() => qr.make());
   assert.deepEqual(await readRequestFragment(new URL(compact).hash), request);
   assert.deepEqual(await readRequestFragment(new URL(original).hash), request);
+});
+
+test('approval shows the Flutter viewer without other signer personal data', () => {
+  const request = { document: {
+    id: 11, name: 'SIMOPS', unitId: 7, versionId: 3, day: 20261023,
+    createdBy: 45, updatedBy: 99, operations: [{ id: 1, title: 'Work' }],
+    signs: [{ userSummary: { email: 'other-signer@example.com' } }],
+    signGroups: [{ signIds: [8, 9] }],
+    fullSimopsSignSnapshot: { privateEvidence: 'secret' },
+    links: [{ url: 'private-link' }],
+  } };
+  const url = buildStaticViewerUrl(request, 'https://alexqwesa.github.io/vsp-simops-static/external-signing.html#request=abc');
+  const parsed = new URL(url);
+  const params = new URLSearchParams(parsed.hash.slice(1));
+  const payload = JSON.parse(Buffer.from(params.get('d'), 'base64url').toString('utf8'));
+
+  assert.equal(parsed.pathname, '/vsp-simops-static/');
+  assert.equal(params.get('transient'), '1');
+  assert.equal(payload.set.name, 'SIMOPS');
+  assert.equal(payload.set.status, 2);
+  assert.deepEqual(payload.set.signs, []);
+  assert.deepEqual(payload.set.signGroups, []);
+  assert.equal(payload.set.createdBy, 1);
+  assert.equal(payload.set.updatedBy, 1);
+  assert(!JSON.stringify(payload).includes('other-signer@example.com'));
+  assert(!JSON.stringify(payload).includes('privateEvidence'));
+  assert(!fs.readFileSync(path.join(__dirname, 'external-signing.html'), 'utf8').includes('rawDetails'));
 });
 
 test('login asks for an existing key only after explicit consent and returns no approval', async () => {

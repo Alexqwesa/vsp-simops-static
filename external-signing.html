@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https: http:; frame-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https: http:; frame-src 'self'; base-uri 'none'; form-action 'none'">
   <title>SIMOPS approval</title>
   <link rel="icon" type="image/png" href="simops_logo.png">
   <link rel="stylesheet" href="external-signing.css">
@@ -33,9 +33,12 @@
     <p id="simopsLink" class="note muted" hidden></p>
 
     <p id="summary" role="status" data-aloc="Reading invitation…|Đang đọc lời mời…|Чтение приглашения…"></p>
-    <section id="document" aria-label="SIMOPS document"></section>
-    <details id="rawDetails"><summary data-aloc="Complete document data|Toàn bộ dữ liệu tài liệu|Полные данные документа"></summary><pre id="raw"></pre></details>
+    <section id="document" aria-label="SIMOPS document" hidden>
+      <iframe id="simopsViewer" title="SIMOPS document" referrerpolicy="no-referrer"></iframe>
+      <p><a id="openSimopsViewer" target="_blank" rel="noopener noreferrer" data-aloc="Open full-size SIMOPS|Mở SIMOPS toàn màn hình|Открыть SIMOPS в полном размере"></a></p>
+    </section>
     <p><label><input id="reviewed" type="checkbox" disabled> <span id="consent"></span></label></p>
+    <p id="eulaRow" hidden><label><input id="eula" type="checkbox" disabled> <span id="eulaLabel" data-aloc="I agree to the SIMOPS external signer terms: I will use passkeys only on devices I control; my approvals are cryptographic confirmations of the reviewed SIMOPS content; browser cache is not an archive — I will keep exported SIMOPS JSON and passkey response files; VSP verifies identity and authority separately from this checkbox.|Tôi đồng ý với điều khoản người ký ngoài VSP của SIMOPS: chỉ dùng passkey trên thiết bị tôi kiểm soát; phê duyệt của tôi là xác nhận mật mã đối với nội dung SIMOPS đã xem; bộ nhớ đệm trình duyệt không phải kho lưu — tôi sẽ giữ JSON SIMOPS đã xuất và tệp phản hồi passkey; VSP xác minh danh tính và quyền ký riêng, ngoài ô này.|Я соглашаюсь с условиями внешнего подписанта SIMOPS: буду использовать ключи только на устройствах под моим контролем; мои одобрения — криптографическое подтверждение просмотренного содержимого SIMOPS; кэш браузера не является архивом — я сохраню экспортированный JSON SIMOPS и файлы ответа ключа; ВСП отдельно проверяет личность и полномочия, вне этого флажка."></span></label></p>
 
     <div id="pcActions" class="actions" hidden>
       <button type="button" id="createDevice" disabled data-aloc="Continue on this PC (Windows Hello)|Tiếp tục trên PC này (Windows Hello)|Продолжить на этом ПК (Windows Hello)"></button>

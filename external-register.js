@@ -9,6 +9,12 @@ function registrationRequest(fields) {
     request[key] = key === 'email' ? value.toLowerCase() : value;
   }
   if (!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(request.email)) throw new Error('Invalid email');
+  const eula = fields.eula;
+  if (!(eula === true || eula === 'on' || eula === 'true' || eula === '1')) {
+    throw new Error('EULA required');
+  }
+  request.eulaAccepted = true;
+  request.eulaVersion = 1;
   return request;
 }
 

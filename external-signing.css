@@ -18,6 +18,7 @@ main { max-width: 1050px; margin: auto; padding: 24px; }
 .note.ok { border-color: #15803d66; background: #15803d14; }
 section, details { border: 1px solid #8886; padding: 16px; border-radius: 8px; margin: 16px 0; }
 pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+#simopsViewer { display: block; width: 100%; height: min(78vh, 900px); min-height: 500px; border: 1px solid #8886; border-radius: 8px; }
 table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
 th, td { border: 1px solid #8886; padding: 8px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
