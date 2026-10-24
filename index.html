@@ -32,13 +32,13 @@
       // that same version directory and make Flutter's base href that directory.
       // Otherwise this is root app mode: keep Flutter routes rooted at /, but
       // always load immutable build files from /version/<defaultBuildVersion>/.
-      const appBase = versionBase || '/';
+      const appBase = versionBase || '/vsp-simops-static/';
       // In Flutter web debug (`flutter run -d chrome`), `__DEFAULT_BUILD_VERSION__` is not
       // replaced and the dev server doesn't serve `/version/<build>/...` assets.
       // Fall back to the standard debug boot flow in that case.
       const assetBase = versionBase
         ? normalizeDir(versionBase)
-        : (isDebugDevServer ? '/' : normalizeDir(`/version/${defaultBuildVersion}`));
+        : (isDebugDevServer ? '/vsp-simops-static/' : normalizeDir(`/version/${defaultBuildVersion}`));
 
       const base = document.querySelector('base') || document.createElement('base');
       base.setAttribute('href', appBase);
@@ -287,7 +287,7 @@
 
     if (window.__vspDebugBoot) {
       const s = document.createElement("script");
-      s.src = "main.dart.js";
+      s.src = "/vsp-simops-static/main.dart.js";
       s.defer = true;
       document.body.appendChild(s);
       return;
