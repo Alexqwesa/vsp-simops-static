@@ -11,6 +11,15 @@ const { compactRequestUrl, readRequestFragment } = require('./external-signing.j
 const { buildStaticViewerUrl } = require('./external-signing.js');
 const qrcode = require('./qrcode.js');
 
+test('signing controls precede the full-width document viewer', () => {
+  const html = fs.readFileSync(path.join(__dirname, 'external-signing.html'), 'utf8');
+  const css = fs.readFileSync(path.join(__dirname, 'external-signing.css'), 'utf8');
+  assert(html.indexOf('id="confirm"') < html.indexOf('id="document"'));
+  assert(html.indexOf('id="reviewed"') < html.indexOf('id="document"'));
+  assert.match(css, /#simopsViewer\s*\{[^}]*width:\s*100%/);
+  assert.match(css, /#simopsViewer\s*\{[^}]*height:\s*100dvh/);
+});
+
 test('base64url transports a UTF-8 SIMOPS document without padding', () => {
   const bytes = new TextEncoder().encode('SIMOPS: công việc / работа');
   const encoded = signingBase64(bytes);
