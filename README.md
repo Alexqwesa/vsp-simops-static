@@ -1,224 +1,93 @@
-# Web bootstrap, sideload, and cleanup
+# SIMOPS static viewer and signing
 
-This folder owns the public web shell, the versioned bootstrap loader, the background sideload updater, and the cache-cleanup page.
+This repository contains the deployed Flutter application. It can display SIMOPS,
+keep local history, create local drafts (negative IDs), and show the bundled matrix.
+Signing uses Flutter controls and your browser's passkey support. Existing
+`external-signing.html` links redirect to the Flutter app, preserving the invitation.
 
-## Entry Points
+## Keep your SIMOPS
 
-- [`index.html`](C:/Users/user/StudioProjects/vsp_antoan/vsp_dsno_flutter/web/index.html) is the public shell.
-- The packaged shell rewrites its script tags to versioned direct links:
-  - `/version/<build>/boot_download_helpers.js`
-  - `/version/<build>/sha256_fallback.js` (lazy-loaded on plain HTTP when Web Crypto is unavailable)
-  - `/version/<build>/app_update.js`
-- Those files are fresh build assets loaded directly from `index.html`, not blob-executed.
-- [`app_update.js`](C:/Users/user/StudioProjects/vsp_antoan/vsp_dsno_flutter/web/app_update.js) loads the active build and performs background update checks.
-- [`boot_download_helpers.js`](C:/Users/user/StudioProjects/vsp_antoan/vsp_dsno_flutter/web/boot_download_helpers.js) provides resumable gzip download and decode helpers.
-- [`flutter_bootstrap.js`](C:/Users/user/StudioProjects/vsp_antoan/vsp_dsno_flutter/web/flutter_bootstrap.js) loads the actual Flutter app from the versioned build.
-- [`cleanup_cache.html`](C:/Users/user/StudioProjects/vsp_antoan/vsp_dsno_flutter/web/cleanup_cache.html) clears loader state and browser-managed runtime state.
-- In packaged output, the root folder is intentionally minimal: only `index.html` and `latest.json` stay at top level; the cleanup page and all other web assets live under `/version/<build>/`.
+Use **Export SIMOPS JSON** on the signing screen, or **Local history → Export JSON**.
+Save the downloaded `simops.json` somewhere you back up. Browser local storage is
+only a convenience: clearing site data, private browsing, storage eviction, another
+browser, or another hostname can make that history unavailable. It is not cloud backup.
 
-## Bootstrap Flow
+Only the invited person's signing slot is included in the signing copy. Other
+signers' personal details and evidence are excluded. After confirmation, your own
+response evidence is included in your local/exported copy as **pending verification**.
+The private SIMOPS server must verify it before recording an approval. A JSON copy
+is a saved review record, not proof of the server's current status or independent
+cryptographic verification. Export after signing to include the response.
 
-1. The browser opens `index.html`.
-2. `index.html` loads `app_update.js`.
-3. `app_update.js` fetches `/latest.json`.
-4. It chooses either the latest manifest or the last good manifest stored in `localStorage`.
-5. It downloads the versioned `flutter_bootstrap.js.gz` from `/version/<build>/`, unzips it, and executes it from a blob URL.
-6. The bootstrap loader resolves build-relative URLs for `main.dart.js`, CanvasKit, and the other boot assets.
-7. `boot_download_helpers.js` is loaded directly from the same versioned directory as `app_update.js`.
+Cloudflare is an optional, temporary encrypted relay. It is not a permanent SIMOPS
+archive. Successful server acknowledgement clears the invitation/response from the
+active mailbox; expired mailboxes are removed by scheduled cleanup. See
+[relay deployment and retention](CLOUDFLARE.md). An expired invitation does not stop
+you reopening a previously exported SIMOPS JSON for viewing.
 
-### Build Resolution
+## Open your JSON later on localhost
 
-The bootstrap loader can resolve the build from:
+Install [Python 3](https://www.python.org/downloads/) and optionally
+[Git](https://git-scm.com/downloads). Obtain this repository's **gh-pages** branch
+(or download a ZIP of a `build-*` tag and extract it):
 
-- `window.__FLUTTER_BUILD__`
-- the versioned `flutter_bootstrap.js` script URL
+```sh
+git clone --branch gh-pages https://github.com/Alexqwesa/vsp-simops-static.git
+cd vsp-simops-static
+python -m http.server 8080 --bind 127.0.0.1
+```
 
-The loader then uses `/version/<build>/` as the base for all boot assets.
+On Windows, `py -m http.server 8080 --bind 127.0.0.1` also works. Open
+[the local viewer](http://localhost:8080/), choose **Local history**, and click
+**Import SIMOPS JSON**. Select your saved JSON. Keep the terminal running while
+viewing; Ctrl+C stops it. Do not open `index.html` via `file://`.
 
-### CanvasKit Selection
+The build uses relative paths and bundles its rendering engine and matrix assets.
+It can run from another folder/repository without the intranet server or relay.
+Missing matrix assets produce a warning; keep the assets folder when copying it.
+Viewing is possible on localhost, but passkeys issued for `alexqwesa.github.io`
+cannot sign on localhost or another hostname. Use the original signing site for
+those invitations. Local storage is separate for each origin.
 
-- Chromium CanvasKit is used only when `window.crossOriginIsolated === true`.
-- Otherwise the non-chromium CanvasKit path is used.
-- The selection is based on page isolation state, not on the backend API origin or iframe embedding alone.
+## Host a copy in your own repository
 
-## Init
+Copy the published files (including hidden `.nojekyll`, `assets`, and `canvaskit`)
+into your repository's Pages branch. Configure **Settings → Pages → Deploy from a
+branch**, select that branch and `/ (root)`. See [GitHub's Pages instructions](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
+Open the resulting URL and import your JSON locally. You do **not** need to commit
+personal SIMOPS JSON, invitation links, or signing responses to the repository.
 
-Flutter initialization happens in [`lib/main.dart`](C:/Users/user/StudioProjects/vsp_antoan/vsp_dsno_flutter/lib/main.dart).
+To build from application source, keep `my_helpers` next to the source checkout,
+matching the Flutter path dependency. In `vsp_dsno_flutter` run:
 
-Important frozen startup values:
+```sh
+flutter pub get
+flutter build web --release --target lib/main_static_site.dart --dart-define=BUILD_NUMBER=1
+python tool/prepare_static_site.py --build-number 1
+```
 
-- `externalJwtToken` is read once from the URL during app startup.
-- `bootstrapAutoLoginEnabled` is derived from that startup token state.
-- `anonBootstrapEnabled` is derived from the URL at startup.
-- the loader stores a staged `flutter.nextManifest` while a newer version is being downloaded
-- `flutter.lastGoodManifest` remains the default boot source while `flutter.nextManifest` is still filling its cache
-- if `flutter.nextManifest.version` does not match the live `latest.json`, the loader discards it and cleans its cache instead of replacing `flutter.lastGoodManifest`
-- if a stored last-good manifest points to a boot cache that is not complete yet, the loader ignores that manifest and falls back to `latest.json` instead of treating the partial cache as ready
+Publish the contents of `build/web`. The preparation step installs this README,
+relay instructions and a portable bootstrap without changing the intranet shell.
+For signing on a new hostname, configure the private server's signing-page URL
+and enroll new passkeys for that hostname; copying the viewer does not migrate keys.
 
-Important runtime state:
+## Deployment versions
 
-- `SessionManager` holds the current auth session.
-- `authStatusProvider` derives authenticated/unauthenticated state from `getSelfRole`.
-- router state is redirected from the auth state and saved route state.
+The source workflow publishes each deployment to this repository's `gh-pages`
+branch and creates an annotated **`build-<UTC YYYYMMDDHHMMSS>`** tag on that
+deployment commit, for example `build-20261027143005`. The same number is passed to Flutter as
+`BUILD_NUMBER`; `build-info.json` records the number, tag and source commit.
+Deployments are serialized; re-running a workflow gets a new timestamp. Tags identify deployed
+artifacts in this static repository, not commits in the private source repository.
 
-## Login / Logout
+To view a saved build separately:
 
-### Normal Login
+```sh
+git fetch --tags
+git worktree add ../simops-old build-20261027143005
+cd ../simops-old
+python -m http.server 8081 --bind 127.0.0.1
+```
 
-- Username/password login goes through `loginSvodka()`.
-- On success, the Serverpod session key is stored.
-- Auth providers are invalidated after login so the UI refreshes.
-
-### Token Auto-login
-
-Compatibility fallback:
-
-- `?token=...`
-- `#token=...`
-
-Primary iframe handoff:
-
-- the host page sends `postMessage({ type: 'svodka-bootstrap-token', token })`
-- the web shell queues the payload and Flutter consumes it directly
-- no reload is required for the message-based path
-
-### Anonymous Auto-login
-
-Compatibility fallback:
-
-- `?anon=1`
-- `#anon=1`
-
-Primary iframe handoff:
-
-- the host page sends `postMessage({ type: 'svodka-bootstrap-token', token, anon: true })`
-- Flutter treats the same bootstrap message as anonymous bootstrap when `anon: true` is present
-- anonymous bootstrap does not replace an already signed-in different user
-
-### Logout
-
-- manual logout calls `SessionManager.signOutDevice()`
-- the app invalidates generated providers and returns to the shell route flow
-- logout does not erase loader caches or version state
-
-## URL Changes
-
-Current bootstrap URL inputs:
-
-- `?token=...`
-- `#token=...`
-- `?anon=1`
-- `#anon=1`
-
-Current route behavior:
-
-- unauthenticated users are redirected to `/login`
-- authenticated users land on the saved or requested route
-- embedded token/anon state is consumed during startup, not by route parsing
-
-The URL token path remains a fallback for compatibility while the message-based path is rolled out.
-
-## Inner State Changes
-
-Bootstrap and auth can change these internal states:
-
-- `SessionManager` key storage
-- `authStatusProvider`
-- `manualLogoutProvider`
-- `externalJwtAutoLoginAttemptsProvider`
-- generated Riverpod provider cache
-- router redirection and route persistence state
-
-## Sideload
-
-[`app_update.js`](C:/Users/user/StudioProjects/vsp_antoan/vsp_dsno_flutter/web/app_update.js) is the sideload controller.
-
-It:
-
-- fetches `/latest.json`
-- keeps the last good manifest in `localStorage`
-- is loaded from the source shell as `/app_update.js`
-- is rewritten to `/version/<build>/app_update.js` in the packaged backend bundle so the deployed shell controller stays in sync with that build
-- is not part of the background sideload file set
-- downloads the versioned `flutter_bootstrap.js.gz`, gunzips it, and loads it from a blob URL
-- downloads boot assets in the background after the app starts
-- keeps the current app usable while the new version is still loading
-- caps retry delays at 5 seconds
-- shows aggregate progress for the full sideload bundle
-- background sideload downloads use the shared fetch-based boot downloader
-- browser boot downloads that need the actual bytes use streamed `fetch()` so a hard disconnect can keep the partial body and resume from the saved offset
-- completed boot files are written to version-scoped browser Cache Storage, so a later bootstrap reload can reuse files downloaded by sideload instead of fetching them again
-- partial boot files are checkpointed asynchronously into a separate partial Cache Storage entry; the ready entry is written only after the full file is verified
-- cache checkpoint writes use Blob parts and delayed serialized flushes so the active download stream is not blocked by byte concatenation or Cache Storage I/O on every chunk
-- `latest.json` contains `sha256` and `gzSha256` for boot files; `gzSha256` is the validator used for transferred `.gz` files
-- a ready cache entry is accepted only when its size and SHA-256 match the manifest, so a corrupt ready cache is deleted and downloaded again
-- a newly downloaded file is promoted from partial cache to ready cache only after the downloaded bytes match the manifest hash
-- old boot cache namespaces are not deleted during read/write; they are removed only after the new version has finished downloading, passed self-test, and been promoted as ready
-- when the server provides a validator such as `ETag`, the helper uses `If-Range` on resume so a changed file falls back to a full redownload instead of being marked ready from broken bytes
-
-The background update bar is part of the sideload UX and is controlled entirely from `app_update.js`.
-
-Resume policy:
-
-- resumed requests send `Range: bytes=<offset>-`
-- if a cached partial exists, the resume offset is derived from the cached response body length
-- cache checkpoint writes are batched, serialized, and stored under a partial key; pause/resume cannot overwrite a ready file with a partial body
-- complete ready-cache reuse requires manifest size and SHA-256 validation when those fields are present
-- if a stored partial belongs to an older or stale `flutter.nextManifest`, the stale manifest cleanup removes that version cache before the latest version is downloaded
-- the helper prefers `206 Partial Content`
-- `If-Range` is disabled by default; versioned immutable files use manifest `gzSize` and `gzSha256` as the integrity guard
-- a resumed request must return `206 Partial Content`; if the server returns `200 OK`, the helper treats it as an ignored Range request, cancels/discards the body, keeps the partial cache, and retries the same resume offset until retry limits are hit
-- `200 OK` is accepted only for offset `0`
-- an unexpected `Content-Range` is rejected before appending bytes and retried without dropping the partial cache
-- retry laps use a cache-busting request URL and no-cache headers
-- the first attempt may use the browser cache, but any retry after a stall/restart does not
-- background update retries keep the last loaded byte offset for the current file, so a network drop resumes the same file instead of restarting from zero
-- completed boot downloads are reused in-session so the same URL is not fetched again
-- inflight boot downloads are shared so a second caller for the same URL waits for the first request instead of starting a duplicate transfer
-- small boot downloads are kept in-session even if the first caller only needed progress, so a later boot pass can reuse them without another network request
-- `boot_download_helpers.js` lazily loads `fflate.min.js` from the same versioned directory when the browser does not expose `DecompressionStream`
-- on plain `http://` deploys (non-secure context), `crypto.subtle.digest` is unavailable; the helper then lazy-loads `sha256_fallback.js` (pure JS SHA-256) from the same versioned directory for manifest integrity checks
-- after the background downloader finishes and self-tests the new version, it promotes `flutter.nextManifest` to `flutter.lastGoodManifest` and then clears older boot cache namespaces
-
-### Bootstrap Progress
-
-The bootstrap overlay is separate from sideload and is intentionally file-oriented:
-
-- the first progress bar tracks the current boot file transfer
-- the label above it shows the current phase, first `CanvasKit` and then `main.dart.js`
-- the second progress bar shows overall bootstrap progress
-- the subtitle below the bars updates for download, decompression, retry, and launch phases
-
-## Clear
-
-[`cleanup_cache.html`](C:/Users/user/StudioProjects/vsp_antoan/vsp_dsno_flutter/web/cleanup_cache.html) is the loader cleanup page.
-
-The bootstrap overlay also shows a dark red `Reset app cache!` button under the load progress. In packaged output it routes to `/version/<build>/cleanup_cache.html`.
-
-It clears:
-
-- `flutter.lastGoodManifest` from `localStorage`
-- `flutter.*` SharedPreferences keys from `localStorage`
-- registered service workers
-- Cache Storage entries
-
-It must not clear:
-
-- IndexedDB application data
-- unrelated `localStorage` keys
-- normal HTTP cache entries directly
-
-It then redirects back to `index.html?cache_bust=...&loader_repair=1`.
-
-## Known Issue
-
-The custom JavaScript fetch path is not the same as Chrome's internal resource loader.
-
-- Chrome's native loader can behave more robustly on slow or unstable connections.
-- There is no public JavaScript implementation that exactly reproduces Chrome's internal retry and transport behavior.
-- We still use the custom loader because it supports resumable gzip boot files.
-
-## Tests
-node --test web/app_update_boot.test.js
-node --test web/boot_download_helpers.test.js
-node --test web/flutter_bootstrap_helpers.test.js
+Replace the example tag with one that exists. Open `http://localhost:8081/` and
+import your JSON again; browser history is separate for a different port.

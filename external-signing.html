@@ -4,78 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https: http:; frame-src 'self'; base-uri 'none'; form-action 'none'">
-  <title>SIMOPS approval</title>
-  <link rel="icon" type="image/png" href="simops_logo.png">
-  <link rel="stylesheet" href="external-signing.css">
-  <script src="qrcode.js" defer></script>
-  <script src="external-signing.js" defer></script>
+  <title>SIMOPS signing</title>
+  <script src="external-signing-redirect.js" defer></script>
 </head>
-<body>
-  <main>
-    <div class="control-panel">
-    <header class="brand">
-      <img src="simops_logo.png" width="48" height="48" alt="SIMOPS">
-      <div>
-        <h1 data-aloc="SIMOPS secure signing|Ký SIMOPS an toàn|Безопасное подписание SIMOPS">SIMOPS</h1>
-        <label class="lang">
-          <span data-aloc="Language|Ngôn ngữ|Язык"></span>
-          <select id="language" aria-label="Language">
-            <option value="en">English</option>
-            <option value="vi">Tiếng Việt</option>
-            <option value="ru">Русский</option>
-          </select>
-        </label>
-      </div>
-    </header>
-
-    <p class="lede" data-aloc="Review the request and confirm with your passkey. You can do this from any network.|Xem yêu cầu và xác nhận bằng passkey. Bạn có thể làm việc này trên bất kỳ mạng nào.|Просмотрите запрос и подтвердите ключом. Это можно сделать из любой сети."></p>
-<aside
-  id="networkNote"
-  class="note"
-  role="note"
-  data-aloc="Review the document and confirm using your passkey. If SIMOPS is open, the response can be transferred automatically. Otherwise, download the response JSON and send it to your authorized VSP coordinator for verification and import. Approval is recorded only after SIMOPS verifies the response.|
-  Xem tài liệu và xác nhận bằng passkey của bạn. Nếu SIMOPS đang mở, phản hồi có thể được chuyển tự động. Nếu không, hãy tải tệp JSON phản hồi và gửi cho người điều phối VSP được ủy quyền để xác minh và nhập vào hệ thống. Việc phê duyệt chỉ được ghi nhận sau khi SIMOPS xác minh phản hồi.|
-  Просмотрите документ и подтвердите его своим ключом доступа (passkey). Если SIMOPS открыт, ответ может быть передан автоматически. В противном случае скачайте JSON-файл ответа и передайте его уполномоченному координатору ВСП для проверки и импорта. Согласование фиксируется только после проверки ответа системой SIMOPS."
-></aside>
-
-    <p id="simopsLink" class="note muted" hidden></p>
-
-    <p id="summary" role="status" data-aloc="Reading invitation…|Đang đọc lời mời…|Чтение приглашения…"></p>
-    <p><label><input id="reviewed" type="checkbox" disabled> <span id="consent"></span></label></p>
-    <p id="eulaRow" hidden><label><input id="eula" type="checkbox" disabled> <span id="eulaLabel" data-aloc="I agree to the SIMOPS external signer terms: I will use passkeys only on devices I control; my approvals are cryptographic confirmations of the reviewed SIMOPS content; browser cache is not an archive — I will keep exported SIMOPS JSON and passkey response files; VSP verifies identity and authority separately from this checkbox.|Tôi đồng ý với điều khoản người ký ngoài VSP của SIMOPS: chỉ dùng passkey trên thiết bị tôi kiểm soát; phê duyệt của tôi là xác nhận mật mã đối với nội dung SIMOPS đã xem; bộ nhớ đệm trình duyệt không phải kho lưu — tôi sẽ giữ JSON SIMOPS đã xuất và tệp phản hồi passkey; VSP xác minh danh tính và quyền ký riêng, ngoài ô này.|Я соглашаюсь с условиями внешнего подписанта SIMOPS: буду использовать ключи только на устройствах под моим контролем; мои одобрения — криптографическое подтверждение просмотренного содержимого SIMOPS; кэш браузера не является архивом — я сохраню экспортированный JSON SIMOPS и файлы ответа ключа; ВСП отдельно проверяет личность и полномочия, вне этого флажка."></span></label></p>
-
-    <div id="pcActions" class="actions" hidden>
-      <button type="button" id="createDevice" disabled data-aloc="Continue on this PC (Windows Hello)|Tiếp tục trên PC này (Windows Hello)|Продолжить на этом ПК (Windows Hello)"></button>
-      <button type="button" id="openAndroid" disabled data-aloc="Use Android instead (scan QR)|Dùng Android (quét QR)|Использовать Android (сканировать QR)"></button>
-    </div>
-    <button id="confirm" disabled data-aloc="Confirm with passkey|Xác nhận bằng passkey|Подтвердить ключом"></button>
-
-    <section id="androidPanel" class="android-panel" hidden>
-      <h2 data-aloc="Open this request on Android|Mở yêu cầu này trên Android|Откройте этот запрос на Android"></h2>
-      <p id="androidHelp"></p>
-      <div id="androidQr" class="qr" role="img" aria-label="QR code"></div>
-      <p class="mono" id="androidUrl"></p>
-      <button type="button" id="copyAndroidUrl" data-aloc="Copy link|Sao chép liên kết|Скопировать ссылку"></button>
-      <p data-aloc="On the phone: finish the passkey there, download the JSON, then import that file here (no Bluetooth).|Trên điện thoại: hoàn tất passkey, tải JSON, rồi nhập tệp tại đây (không cần Bluetooth).|На телефоне: завершите ключ, скачайте JSON и импортируйте файл здесь (Bluetooth не нужен)."></p>
-      <p>
-        <label class="file">
-          <span data-aloc="Import JSON from phone|Nhập JSON từ điện thoại|Импортировать JSON с телефона"></span>
-          <input id="importJson" type="file" accept="application/json,.json">
-        </label>
-      </p>
-      <button type="button" id="backToPc" data-aloc="Back to this PC|Quay lại PC này|Назад к этому ПК"></button>
-    </section>
-
-    <button id="download" hidden data-aloc="Download response|Tải phản hồi|Скачать ответ"></button>
-    <p id="status" role="status" aria-live="polite"></p>
-    <p data-aloc="The request remains pending until SIMOPS verifies the response. Opening this link does not approve anything.|Yêu cầu chờ xử lý cho tới khi SIMOPS xác minh phản hồi. Mở liên kết không phê duyệt bất cứ điều gì.|Запрос ожидает проверки ответа в SIMOPS. Открытие ссылки ничего не подтверждает."></p>
-    <p><a href="external-register.html" data-aloc="Register as an external signer|Đăng ký người ký ngoài VSP|Регистрация внешнего подписанта"></a></p>
-    </div>
-    <section id="document" aria-label="SIMOPS document" hidden>
-      <p><a id="openSimopsViewer" target="_blank" rel="noopener noreferrer" data-aloc="Open full-size SIMOPS|Mở SIMOPS toàn màn hình|Открыть SIMOPS в полном размере"></a></p>
-      <iframe id="simopsViewer" title="SIMOPS document" referrerpolicy="no-referrer"></iframe>
-    </section>
-  </main>
-</body>
+<body></body>
 </html>
