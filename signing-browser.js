@@ -43,6 +43,17 @@
       authenticatorData: base64(a.response.authenticatorData), signature: base64(a.response.signature),
       userHandle: a.response.userHandle ? base64(a.response.userHandle) : null };
   }
+  // Username-less sign-in for the signer inbox: no credential list is sent, the
+  // authenticator offers the passkeys it holds for this site and the person picks one.
+  // The relay checks the assertion against the public keys the SIMOPS server gave it.
+  async function discover(challenge) {
+    if (!globalThis.isSecureContext || !navigator.credentials) throw Error('A secure browser with passkey support is required');
+    const a = await navigator.credentials.get({ publicKey: { challenge: bytes(challenge), rpId: location.hostname,
+      allowCredentials: [], userVerification: 'required', timeout: 120000 } });
+    if (!a) throw Error('Passkey confirmation cancelled');
+    return JSON.stringify({ credentialId: base64(a.rawId), clientDataJSON: base64(a.response.clientDataJSON),
+      authenticatorData: base64(a.response.authenticatorData), signature: base64(a.response.signature) });
+  }
   async function compact(link) {
     const url = new URL(link), params = new URLSearchParams(url.hash.slice(1));
     const raw = params.get('request');
@@ -62,7 +73,7 @@
         user: { id: new TextEncoder().encode(`simops:${r.signerId}`), name: r.signerEmail || `simops-${r.signerId}`, displayName: r.signerName || `SIMOPS ${r.signerId}` },
         excludeCredentials: (r.excludeCredentialIds || []).map(id => ({ type: 'public-key', id: bytes(id) })),
         pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
-        authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'preferred' },
+        authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'required' },
         attestation: 'none', timeout: 120000, hints: ['client-device'],
       }});
       if (!created?.response?.getPublicKey || created.response.getPublicKeyAlgorithm() !== -7) throw Error('An ES256 passkey is required');
@@ -79,6 +90,30 @@
       ...await assertion(r, r.challenge, adding ? [id] : r.credentialIds || [id]),
       ...(publicKey ? { publicKey, registration } : {}), ...(authorization ? { authorization } : {}) });
   }
+  // Offline registration: creates a passkey bound to the registration data.
+  // The server verifies the proof; it only becomes usable after VSP approval.
+  async function registerPasskey(raw) {
+    const r = JSON.parse(raw);
+    if (r.v !== 1 || r.kind !== 'external-registration' || r.origin !== location.origin || r.rpId !== location.hostname) {
+      throw Error('Invalid registration site');
+    }
+    if (!globalThis.isSecureContext || !navigator.credentials) throw Error('A secure browser with passkey support is required');
+    const challenge = await hash(canonical(r));
+    const created = await navigator.credentials.create({ publicKey: {
+      challenge: bytes(challenge), rp: { id: r.rpId, name: 'SIMOPS' },
+      user: { id: new TextEncoder().encode(`simops-registration:${challenge.slice(0, 32)}`), name: r.email, displayName: r.fullName },
+      pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
+      authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'required' },
+      attestation: 'none', timeout: 120000, hints: ['client-device'],
+    }});
+    if (!created?.response?.getPublicKey || created.response.getPublicKeyAlgorithm() !== -7) throw Error('An ES256 passkey is required');
+    const id = base64(created.rawId);
+    const key = await crypto.subtle.importKey('spki', created.response.getPublicKey(), { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
+    const publicKey = await crypto.subtle.exportKey('jwk', key);
+    const registration = { clientDataJSON: base64(created.response.clientDataJSON), attestationObject: base64(created.response.attestationObject) };
+    const proof = await assertion(r, challenge, [id]);
+    return JSON.stringify({ ...r, challenge, passkey: { ...proof, publicKey, registration } });
+  }
   function deliver(requestJson, responseJson) {
     const r = JSON.parse(requestJson), response = JSON.parse(responseJson);
     if (response.requestId !== r.requestId) throw Error('Response belongs to another request');
@@ -88,7 +123,7 @@
     }
     return false;
   }
-  const api = { read, compact, validate: async raw => { await validate(raw); return raw; }, sign, deliver };
+  const api = { read, compact, discover, validate: async raw => { await validate(raw); return raw; }, sign, registerPasskey, deliver };
   globalThis.simopsSigning = api;
   if (typeof module !== 'undefined') module.exports = { ...api, canonical, hash };
 })();

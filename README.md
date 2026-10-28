@@ -7,8 +7,8 @@ Signing uses Flutter controls and your browser's passkey support. Existing
 
 ## Keep your SIMOPS
 
-Use **Export SIMOPS JSON** on the signing screen, or **Local history → Export JSON**.
-Save the downloaded `simops.json` somewhere you back up. Browser local storage is
+Use **Export SIMOPS JSON** on the signing screen, or **Open → Export JSON** next to a
+SIMOPS in the list. Save the downloaded `simops.json` somewhere you back up. Browser local storage is
 only a convenience: clearing site data, private browsing, storage eviction, another
 browser, or another hostname can make that history unavailable. It is not cloud backup.
 
@@ -25,6 +25,33 @@ active mailbox; expired mailboxes are removed by scheduled cleanup. See
 [relay deployment and retention](CLOUDFLARE.md). An expired invitation does not stop
 you reopening a previously exported SIMOPS JSON for viewing.
 
+## Users, backup and removal
+
+The site has a bar with the subscreens **Open**, **Register**, **Current** (only while
+a SIMOPS is open or is in the URL), **Create** and **Matrix**. With no SIMOPS in the
+URL it starts on **Register** for a new visitor and on **Open** once this browser knows
+a user or has history.
+
+* **Register** remembers the person who registered here as a user of this browser.
+* **Open** lists the SIMOPS opened in this browser, grouped by user. With several users
+  a SIMOPS belongs to the user who is among its signers (matched by email, then by
+  name); otherwise to the selected user. The user menu on top selects the user whose
+  SIMOPS are shown, or **All users**. SIMOPS created in this browser carry a **local**
+  tag: they were not created on the real SIMOPS server.
+* **Back up a SIMOPS**: the download button of the entry saves its JSON.
+  **Back up a user**: the archive button next to the user saves a ZIP with one JSON file
+  per SIMOPS of that user. **Upload JSON or ZIP file** on **Open** restores either.
+* **Remove a SIMOPS** (bin button) or **remove a user with all their SIMOPS** removes the
+  data from this browser permanently. The only protection is a warning with the buttons
+  **Back up first**, **Cancel** and **Do it now**. Make a backup before you confirm.
+
+## Getting SIMOPS to sign
+
+On **Open**, **Get my SIMOPS to sign** asks you to confirm with your passkey (the browser
+lists your passkeys for this site; nothing else is typed). The relay then shows the SIMOPS
+that wait for your signature, whichever of your passkeys you used. Choose one to review
+and sign it. Passkeys only work on the site they were created for.
+
 ## Open your JSON later on localhost
 
 Install [Python 3](https://www.python.org/downloads/) and optionally
@@ -38,8 +65,8 @@ python -m http.server 8080 --bind 127.0.0.1
 ```
 
 On Windows, `py -m http.server 8080 --bind 127.0.0.1` also works. Open
-[the local viewer](http://localhost:8080/), choose **Local history**, and click
-**Import SIMOPS JSON**. Select your saved JSON. Keep the terminal running while
+[the local viewer](http://localhost:8080/), choose **Open**, and click
+**Upload JSON or ZIP file**. Select your saved file. Keep the terminal running while
 viewing; Ctrl+C stops it. Do not open `index.html` via `file://`.
 
 The build uses relative paths and bundles its rendering engine and matrix assets.

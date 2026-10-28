@@ -103,6 +103,57 @@ relay links will no longer be retrieved by the server; finish outstanding reques
 first or issue new invitations afterwards. Offline response imports still use the
 server's signing request records and validation rules.
 
+## Registration mailbox
+
+External workers who cannot reach the VSP servers leave their registration here.
+`POST /v1/registrations` is public (origin-checked, at most 500 pending, 30 000 bytes
+each, must contain a passkey). It stores personal data (name, company, email) in D1
+until the SIMOPS server imports it (`GET /v1/registrations`, then
+`DELETE /v1/registrations/<id>`, admin key) or 14 days pass. After updating the Worker run
+`npx wrangler d1 execute simops-signing-relay --remote --file schema.sql` once to create the
+`registration` table. The static site uses `https://simops-signing-relay.alexqwesa.workers.dev` by default; set the
+GitHub repository variable `SIMOPS_RELAY_URL` only to point the build at another Worker.
+
+## Signer inbox
+
+A signer opens **Open → Get my SIMOPS to sign** on the static site and confirms with
+any of their passkeys. The relay answers with the invitations assigned to that signer,
+so no emailed link is needed.
+
+* The SIMOPS server copies every active passkey (credential ID, public key, signer ID,
+  RP ID) to the relay. A signer can have several passkeys; the inbox belongs to the
+  signer, not to a key. The list is sent when it changes and at least every 6 hours;
+  a revoked passkey disappears with the next sync.
+* When the server issues an invitation through the relay it also places it in the
+  signer's inbox (`PUT /v1/assignments/<mailbox>`). The emailed link keeps working.
+* The browser asks the relay for a one-time challenge (valid 2 minutes, spent by the
+  first attempt) and signs it with a username-less (`allowCredentials: []`) WebAuthn
+  assertion. The relay verifies the whole assertion: challenge, origin (must be in
+  `ALLOWED_ORIGINS` and equal to the credential's RP ID host), RP ID hash, user presence
+  and user verification, the ES256 signature, and a signature counter that never goes
+  back. The browser never sends or stores the public key; the private key stays in the
+  authenticator.
+* Only invitations assigned to the verified signer are returned. A finished or rejected
+  invitation leaves the inbox; expired entries and challenges are removed by the cron.
+
+**What Cloudflare can read.** An inbox entry holds the same invitation link that the
+email carries, and that link contains the key that decrypts the invitation (the review
+copy of the SIMOPS with only that signer's slot). Whoever administers the Cloudflare
+account can therefore read invitations that wait in an inbox. If that is not acceptable,
+do not enable the inbox: the server then simply does not need the `assignments` calls.
+
+Upgrade steps: apply the schema again (it only adds tables), deploy the Worker, then
+restart the SIMOPS server so it syncs the passkeys.
+
+```sh
+npx wrangler d1 execute simops-signing-relay --remote --file schema.sql
+npx wrangler deploy
+```
+
+Invitations issued before the upgrade are not in anybody's inbox; their emailed links
+still work. Passkeys must be discoverable to be found without a username. New passkeys are
+created that way; an old passkey that the browser cannot offer must be registered again.
+
 ## Verify your deployment
 
 1. Issue an external approval invitation. Confirm its URL contains `#relay=` and
