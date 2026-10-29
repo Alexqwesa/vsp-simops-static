@@ -1,8 +1,73 @@
 'use strict';
 // Browser cryptographic operations only. All visible UI is Flutter.
 (() => {
-  const bytes = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
-  const base64 = b => btoa(Array.from(new Uint8Array(b), c => String.fromCharCode(c)).join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const bytes = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '')), c => c.charCodeAt(0));
+  // Passkey providers do not all answer with the browser's own types: an extension
+  // such as LastPass returns its own credential object, whose binary fields may be
+  // base64 strings, plain arrays or buffers from another script context.
+  // Copy whatever arrives into a plain Uint8Array of this page.
+  const binary = x => {
+    if (typeof x === 'string') return bytes(x);
+    if (ArrayBuffer.isView(x)) return Uint8Array.from(new Uint8Array(x.buffer, x.byteOffset, x.byteLength));
+    if (Object.prototype.toString.call(x) === '[object ArrayBuffer]') return Uint8Array.from(new Uint8Array(x));
+    if (Array.isArray(x)) return Uint8Array.from(x);
+    throw Error('Unexpected binary value from the passkey provider');
+  };
+  const base64 = b => btoa(Array.from(binary(b), c => String.fromCharCode(c)).join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  // Minimal CBOR reader (unsigned/negative ints, byte/text strings, arrays, maps,
+  // simple values): enough for a WebAuthn attestationObject and its COSE key.
+  function cbor(data) {
+    let at = 0;
+    const length = info => {
+      if (info < 24) return info;
+      const size = { 24: 1, 25: 2, 26: 4 }[info];
+      if (!size) throw Error('Unsupported CBOR length');
+      let n = 0;
+      for (let i = 0; i < size; i++) n = n * 256 + data[at++];
+      return n;
+    };
+    const item = () => {
+      const head = data[at++], major = head >> 5, n = length(head & 31);
+      switch (major) {
+        case 0: return n;
+        case 1: return -1 - n;
+        case 2: return data.slice(at, at += n);
+        case 3: return new TextDecoder().decode(data.slice(at, at += n));
+        case 4: return Array.from({ length: n }, item);
+        case 5: { const m = new Map(); for (let i = 0; i < n; i++) m.set(item(), item()); return m; }
+        case 7: return { 20: false, 21: true, 22: null }[head & 31];
+        default: throw Error('Unsupported CBOR value');
+      }
+    };
+    return { value: item(), end: at };
+  }
+  // The credential public key as stored by the authenticator: authData holds
+  // rpIdHash(32) flags(1) signCount(4) aaguid(16) idLength(2) id, then a COSE key.
+  function coseKeyFromAttestation(attestationObject) {
+    const authData = cbor(binary(attestationObject)).value.get('authData');
+    if (!authData || !(authData[32] & 0x40)) throw Error('The passkey response has no public key');
+    const idLength = authData[53] * 256 + authData[54];
+    const key = cbor(authData.slice(55 + idLength)).value;
+    if (key.get(1) !== 2 || key.get(3) !== -7 || key.get(-1) !== 1) throw Error('An ES256 passkey is required');
+    return { kty: 'EC', crv: 'P-256', x: base64(key.get(-2)), y: base64(key.get(-3)) };
+  }
+  // ES256 public key of a new credential as a JWK: from getPublicKey() when the
+  // provider implements it usably, else from the attestationObject itself.
+  async function publicKeyOf(created) {
+    const response = created.response;
+    try {
+      if (typeof response.getPublicKey === 'function' && response.getPublicKeyAlgorithm?.() === -7) {
+        const key = await crypto.subtle.importKey('spki', binary(response.getPublicKey()),
+          { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
+        return await crypto.subtle.exportKey('jwk', key);
+      }
+    } catch (e) {
+      console.info('SIMOPS passkey: getPublicKey() unusable, reading the attestation instead', reason(e));
+    }
+    const key = await crypto.subtle.importKey('jwk', coseKeyFromAttestation(response.attestationObject),
+      { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
+    return crypto.subtle.exportKey('jwk', key);
+  }
   const canonical = v => JSON.stringify((function sort(x) {
     if (Array.isArray(x)) return x.map(sort);
     if (x && typeof x === 'object') return Object.fromEntries(Object.keys(x).sort().map(k => [k, sort(x[k])]));
@@ -39,12 +104,25 @@
   // wraps navigator.credentials) may still be closing that prompt and rejects the
   // next one with "A request is already pending". That is not the person's answer,
   // so try again shortly; a real cancel (NotAllowedError) is never retried.
+  // True when an extension (e.g. LastPass) replaced the browser's passkey
+  // functions on this page. Such wrappers can leave their own prompt open.
+  const wrappedByExtension = () => {
+    try {
+      const native = fn => /\[native code\]/.test(Function.prototype.toString.call(fn));
+      return !native(navigator.credentials.create) || !native(navigator.credentials.get);
+    } catch { return false; }
+  };
   async function getCredential(options) {
     for (let attempt = 1; ; attempt++) {
       try {
         return await navigator.credentials.get(options);
       } catch (e) {
-        if (attempt >= 5 || !/already pending/i.test(e?.message || '')) throw e;
+        const pending = /already pending/i.test(e?.message || '');
+        if (pending && attempt >= 5 && wrappedByExtension()) {
+          throw Error('A browser extension (for example LastPass) handles passkeys on this page and left its own passkey prompt open. '
+            + 'Close or cancel that prompt, or turn off the extension\'s passkey option for this site, then press the button again.');
+        }
+        if (attempt >= 5 || !pending) throw e;
         console.info(`SIMOPS passkey: previous prompt still open, retrying (${attempt})`);
         await wait(600 * attempt);
       }
@@ -93,10 +171,9 @@
         authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'required' },
         attestation: 'none', timeout: 120000, hints: ['client-device'],
       }});
-      if (!created?.response?.getPublicKey || created.response.getPublicKeyAlgorithm() !== -7) throw Error('An ES256 passkey is required');
+      if (!created?.response) throw Error('The passkey provider returned no credential');
       id = base64(created.rawId);
-      const key = await crypto.subtle.importKey('spki', created.response.getPublicKey(), { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
-      publicKey = await crypto.subtle.exportKey('jwk', key);
+      publicKey = await publicKeyOf(created);
       registration = { clientDataJSON: base64(created.response.clientDataJSON), attestationObject: base64(created.response.attestationObject) };
       if (r.flow === 'selfService' && ['add', 'replace', 'recover'].includes(r.kind)) {
         authorization = await assertion(r, await hash(`authorize:${r.challenge}:${canonical({ credentialId: id, publicKey })}`), r.credentialIds);
@@ -120,7 +197,7 @@
     if (!globalThis.isSecureContext || !navigator.credentials) throw Error('A secure browser with passkey support is required');
     const challenge = await hash(canonical(r));
     let created;
-    console.info('SIMOPS passkey: create');
+    console.info('SIMOPS passkey: create', wrappedByExtension() ? '(navigator.credentials is wrapped by an extension)' : '');
     try {
       created = await navigator.credentials.create({ publicKey: {
         challenge: bytes(challenge), rp: { id: r.rpId, name: 'SIMOPS' },
@@ -130,12 +207,13 @@
         attestation: 'none', timeout: 120000, hints: ['client-device'],
       }});
     } catch (e) { throw Error(reason(e)); }
-    if (!created?.response?.getPublicKey || created.response.getPublicKeyAlgorithm() !== -7) throw Error('An ES256 passkey is required');
+    if (!created?.response) throw Error('The passkey provider returned no credential');
     console.info('SIMOPS passkey: created', base64(created.rawId));
-    const key = await crypto.subtle.importKey('spki', created.response.getPublicKey(), { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
-    return JSON.stringify({ request: r, challenge, credentialId: base64(created.rawId),
-      publicKey: await crypto.subtle.exportKey('jwk', key),
-      registration: { clientDataJSON: base64(created.response.clientDataJSON), attestationObject: base64(created.response.attestationObject) } });
+    try {
+      return JSON.stringify({ request: r, challenge, credentialId: base64(created.rawId),
+        publicKey: await publicKeyOf(created),
+        registration: { clientDataJSON: base64(created.response.clientDataJSON), attestationObject: base64(created.response.attestationObject) } });
+    } catch (e) { throw Error(reason(e)); }
   }
   // Step 2: proves possession of exactly the passkey from step 1. The server
   // verifies the proof; the key only becomes usable after VSP approval.
