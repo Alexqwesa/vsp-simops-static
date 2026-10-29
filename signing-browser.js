@@ -34,9 +34,26 @@
     }
     return new TextDecoder('utf-8', { fatal: true }).decode(await new Blob(chunks).arrayBuffer());
   }
+  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+  // Right after a passkey is created, Chrome (or a password-manager extension that
+  // wraps navigator.credentials) may still be closing that prompt and rejects the
+  // next one with "A request is already pending". That is not the person's answer,
+  // so try again shortly; a real cancel (NotAllowedError) is never retried.
+  async function getCredential(options) {
+    for (let attempt = 1; ; attempt++) {
+      try {
+        return await navigator.credentials.get(options);
+      } catch (e) {
+        if (attempt >= 5 || !/already pending/i.test(e?.message || '')) throw e;
+        console.info(`SIMOPS passkey: previous prompt still open, retrying (${attempt})`);
+        await wait(600 * attempt);
+      }
+    }
+  }
   async function assertion(r, challenge, ids) {
     if (!ids?.length || ids.some(id => typeof id !== 'string')) throw Error('No registered passkey');
-    const a = await navigator.credentials.get({ publicKey: { challenge: bytes(challenge), rpId: r.rpId,
+    console.info('SIMOPS passkey: confirm', ids);
+    const a = await getCredential({ publicKey: { challenge: bytes(challenge), rpId: r.rpId,
       allowCredentials: ids.map(id => ({ type: 'public-key', id: bytes(id) })), userVerification: 'required', timeout: 120000 } });
     if (!a) throw Error('Passkey confirmation cancelled');
     return { credentialId: base64(a.rawId), clientDataJSON: base64(a.response.clientDataJSON),
@@ -48,7 +65,7 @@
   // The relay checks the assertion against the public keys the SIMOPS server gave it.
   async function discover(challenge) {
     if (!globalThis.isSecureContext || !navigator.credentials) throw Error('A secure browser with passkey support is required');
-    const a = await navigator.credentials.get({ publicKey: { challenge: bytes(challenge), rpId: location.hostname,
+    const a = await getCredential({ publicKey: { challenge: bytes(challenge), rpId: location.hostname,
       allowCredentials: [], userVerification: 'required', timeout: 120000 } });
     if (!a) throw Error('Passkey confirmation cancelled');
     return JSON.stringify({ credentialId: base64(a.rawId), clientDataJSON: base64(a.response.clientDataJSON),
@@ -103,6 +120,7 @@
     if (!globalThis.isSecureContext || !navigator.credentials) throw Error('A secure browser with passkey support is required');
     const challenge = await hash(canonical(r));
     let created;
+    console.info('SIMOPS passkey: create');
     try {
       created = await navigator.credentials.create({ publicKey: {
         challenge: bytes(challenge), rp: { id: r.rpId, name: 'SIMOPS' },
@@ -113,6 +131,7 @@
       }});
     } catch (e) { throw Error(reason(e)); }
     if (!created?.response?.getPublicKey || created.response.getPublicKeyAlgorithm() !== -7) throw Error('An ES256 passkey is required');
+    console.info('SIMOPS passkey: created', base64(created.rawId));
     const key = await crypto.subtle.importKey('spki', created.response.getPublicKey(), { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
     return JSON.stringify({ request: r, challenge, credentialId: base64(created.rawId),
       publicKey: await crypto.subtle.exportKey('jwk', key),
