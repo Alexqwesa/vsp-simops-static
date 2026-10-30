@@ -186,12 +186,14 @@
   }
   // The browser's own reason ("NotAllowedError: ...") so the page can show it.
   const reason = e => (e && e.name && e.name !== 'Error' ? `${e.name}: ` : '') + (e && e.message ? e.message : String(e));
+  // Registrations, and the lost-passkey recovery request that carries a new candidate key.
+  const REGISTRATION_KINDS = new Set(['external-registration', 'external-profile-request']);
   // Offline registration, step 1: creates a passkey bound to the registration data.
   // Returns the new key without the possession proof, so a failed or cancelled
   // step 2 can be repeated for this same passkey instead of creating another one.
   async function createRegistrationPasskey(raw) {
     const r = JSON.parse(raw);
-    if (r.v !== 1 || r.kind !== 'external-registration' || r.origin !== location.origin || r.rpId !== location.hostname) {
+    if (r.v !== 1 || !REGISTRATION_KINDS.has(r.kind) || r.origin !== location.origin || r.rpId !== location.hostname) {
       throw Error('Invalid registration site');
     }
     if (!globalThis.isSecureContext || !navigator.credentials) throw Error('A secure browser with passkey support is required');
@@ -201,7 +203,7 @@
     try {
       created = await navigator.credentials.create({ publicKey: {
         challenge: bytes(challenge), rp: { id: r.rpId, name: 'SIMOPS' },
-        user: { id: new TextEncoder().encode(`simops-registration:${challenge.slice(0, 32)}`), name: r.email, displayName: r.fullName },
+        user: { id: new TextEncoder().encode(`simops-registration:${challenge.slice(0, 32)}`), name: r.email, displayName: r.fullName || r.email },
         pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
         authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'required' },
         attestation: 'none', timeout: 120000, hints: ['client-device'],
