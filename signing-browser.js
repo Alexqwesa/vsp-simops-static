@@ -187,7 +187,7 @@
   // The browser's own reason ("NotAllowedError: ...") so the page can show it.
   const reason = e => (e && e.name && e.name !== 'Error' ? `${e.name}: ` : '') + (e && e.message ? e.message : String(e));
   // Registrations, and the lost-passkey recovery request that carries a new candidate key.
-  const REGISTRATION_KINDS = new Set(['external-registration', 'external-profile-request']);
+  const REGISTRATION_KINDS = new Set(['external-registration', 'external-profile-request', 'external-passkey-change']);
   // Offline registration, step 1: creates a passkey bound to the registration data.
   // Returns the new key without the possession proof, so a failed or cancelled
   // step 2 can be repeated for this same passkey instead of creating another one.
@@ -203,7 +203,7 @@
     try {
       created = await navigator.credentials.create({ publicKey: {
         challenge: bytes(challenge), rp: { id: r.rpId, name: 'SIMOPS' },
-        user: { id: new TextEncoder().encode(`simops-registration:${challenge.slice(0, 32)}`), name: r.email, displayName: r.fullName || r.email },
+        user: { id: new TextEncoder().encode(`simops-registration:${challenge.slice(0, 32)}`), name: r.email || 'SIMOPS passkey', displayName: r.fullName || r.email || 'SIMOPS passkey' },
         pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
         authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'required' },
         attestation: 'none', timeout: 120000, hints: ['client-device'],
@@ -225,6 +225,39 @@
     try { proof = await assertion(r, c.challenge, [c.credentialId]); } catch (e) { throw Error(reason(e)); }
     return JSON.stringify({ ...r, challenge: c.challenge, passkey: { ...proof, publicKey: c.publicKey, registration: c.registration } });
   }
+  // ---- Passkey changes (add, replace, revoke) -----------------------------------
+  // A worker who still has a passkey changes their keys without VSP. The request is
+  // bound to a challenge (step 1), a new key proves possession of it (reusing the
+  // registration steps), and an existing key authorizes the exact new key (step 3).
+  const randomNonce = () => base64(crypto.getRandomValues(new Uint8Array(16)));
+  // Step 1: the request data. `target` is the key to replace or revoke.
+  function newPasskeyChange(action, target, enrollmentId) {
+    if (!['add', 'replace', 'revoke'].includes(action)) throw Error('Unknown passkey action');
+    return JSON.stringify({ v: 1, kind: 'external-passkey-change', action, origin: location.origin, rpId: location.hostname,
+      issuedAt: Date.now(), nonce: randomNonce(), ...(target ? { targetCredentialId: target } : {}),
+      ...(enrollmentId ? { enrollmentId } : {}) });
+  }
+  // The challenge an existing key signs. For a new key it covers that key's credential
+  // ID and public key as well, matching the SIMOPS server's passkeyAuthorizationChallenge.
+  async function authorizationChallenge(change) {
+    if (!change.passkey) return change.challenge;
+    return hash(`authorize:${change.challenge}:${canonical({ credentialId: change.passkey.credentialId, publicKey: change.passkey.publicKey })}`);
+  }
+  // Step 3: an existing, registered key (one of `ids`) signs the change. For revoke there
+  // is no new key, so the change gets its challenge here.
+  async function authorizePasskeyChange(changeJson, ids) {
+    const change = JSON.parse(changeJson);
+    if (change.v !== 1 || change.kind !== 'external-passkey-change' || change.origin !== location.origin || change.rpId !== location.hostname) {
+      throw Error('Invalid passkey change');
+    }
+    if (!change.challenge) {
+      const { challenge, passkey, authorization, ...bound } = change;
+      change.challenge = await hash(canonical(bound));
+    }
+    let proof;
+    try { proof = await assertion({ rpId: change.rpId }, await authorizationChallenge(change), ids); } catch (e) { throw Error(reason(e)); }
+    return JSON.stringify({ ...change, authorization: proof });
+  }
   const registerPasskey = async raw => confirmRegistrationPasskey(await createRegistrationPasskey(raw));
   function deliver(requestJson, responseJson) {
     const r = JSON.parse(requestJson), response = JSON.parse(responseJson);
@@ -236,7 +269,7 @@
     return false;
   }
   const api = { read, compact, discover, validate: async raw => { await validate(raw); return raw; }, sign, registerPasskey,
-    createRegistrationPasskey, confirmRegistrationPasskey, deliver };
+    createRegistrationPasskey, confirmRegistrationPasskey, newPasskeyChange, authorizePasskeyChange, deliver };
   globalThis.simopsSigning = api;
-  if (typeof module !== 'undefined') module.exports = { ...api, canonical, hash };
+  if (typeof module !== 'undefined') module.exports = { ...api, canonical, hash, authorizationChallenge };
 })();
