@@ -224,6 +224,8 @@
     }
     if (Date.now() >= Date.parse(r.expiresAt)) throw Error('Invitation expired');
     return JSON.stringify({ v: 1, requestId: r.requestId,
+      // A redirect login comes back to the tab that started it; the state proves which tab that was.
+      ...(r.kind === 'login' && r.clientState ? { clientState: r.clientState } : {}),
       ...await assertion(r, r.challenge, adding ? [id] : r.credentialIds || [id]),
       ...(publicKey ? { publicKey, registration } : {}), ...(authorization ? { authorization } : {}) });
   }
@@ -305,13 +307,30 @@
   function deliver(requestJson, responseJson) {
     const r = JSON.parse(requestJson), response = JSON.parse(responseJson);
     if (response.requestId !== r.requestId) throw Error('Response belongs to another request');
-    if (r.returnOrigin && window.opener && new URL(r.returnOrigin).origin === r.returnOrigin) {
+    // Redirect and relay logins have their own way back (see loginReturnUrl and the relay); only a popup login
+    // and the other kinds answer their opener window.
+    if (!r.delivery && r.returnOrigin && window.opener && new URL(r.returnOrigin).origin === r.returnOrigin) {
       window.opener.postMessage(JSON.stringify({ type: 'simops-passkey-response', response }), r.returnOrigin);
       return true;
     }
     return false;
   }
-  const api = { read, compact, discover, validate: async raw => { await validate(raw); return raw; }, verifyReceipt, sign, registerPasskey,
+  // Where the browser tab goes after a login whose request asked for a redirect, or null for any other request.
+  // The destination is the return origin the SIMOPS server allowlisted and signed into the request, at a fixed
+  // location. The proof travels in the URL fragment, so it is not sent in any HTTP request, and the app removes
+  // it from the address bar as soon as it starts.
+  function loginReturnUrl(requestJson, responseJson) {
+    const r = JSON.parse(requestJson), response = JSON.parse(responseJson);
+    if (r.kind !== 'login' || r.delivery !== 'redirect') return null;
+    if (response.requestId !== r.requestId || response.clientState !== r.clientState) throw Error('Response belongs to another request');
+    const to = new URL(r.returnOrigin);
+    if (!['https:', 'http:'].includes(to.protocol) || to.origin !== r.returnOrigin || to.username || to.password) {
+      throw Error('Invalid return origin');
+    }
+    return `${to.origin}/#external-login-response=${base64(new TextEncoder().encode(responseJson))}`
+      + `&external-login-state=${encodeURIComponent(r.clientState)}`;
+  }
+  const api = { read, compact, loginReturnUrl, discover, validate: async raw => { await validate(raw); return raw; }, verifyReceipt, sign, registerPasskey,
     createRegistrationPasskey, confirmRegistrationPasskey, newPasskeyChange, authorizePasskeyChange, deliver };
   globalThis.simopsSigning = api;
   if (typeof module !== 'undefined') module.exports = { ...api, canonical, hash, authorizationChallenge, verifyVspSignature };

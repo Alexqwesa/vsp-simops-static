@@ -203,6 +203,14 @@ npx wrangler deploy
 
 Then restart the SIMOPS server so it syncs the passkeys.
 
+Upgrading a relay that already works, to let the Windows and mobile apps sign external workers in
+(login mailboxes need one new column; nothing is lost). Run it before deploying the new Worker:
+
+```sh
+npx wrangler d1 execute simops-signing-relay --remote --file schema-add-claim-hash.sql
+npx wrangler deploy
+```
+
 Invitations issued before the upgrade are not in anybody's inbox; their emailed links
 still work. Passkeys must be discoverable to be found without a username. New passkeys are
 created that way; an old passkey that the browser cannot offer must be registered again.
