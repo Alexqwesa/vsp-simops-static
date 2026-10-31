@@ -74,12 +74,55 @@
     return x;
   })(v));
   const hash = async text => base64(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)));
+  // ---- VSP signatures ---------------------------------------------------------------
+  // The SIMOPS server signs invitations and receipts (ECDSA P-256, SHA-256, signature r||s). What is signed
+  // is the purpose, a line break, then the canonical JSON without vspSignature. The keys come only from vsp-trusted-keys.js,
+  // which ships with this site.
+  const INVITATION_PURPOSE = 'simops-invitation-v1', RECEIPT_PURPOSE = 'simops-receipt-v1';
+  // The page tells a document it cannot trust apart from an ordinary error by this code.
+  const notAuthentic = message => Object.assign(Error(message), { code: 'vsp-signature' });
+  async function verifyVspSignature(purpose, document) {
+    const record = document && document.vspSignature;
+    if (!record || record.v !== 1 || record.alg !== 'ES256' || typeof record.kid !== 'string' || typeof record.sig !== 'string') {
+      throw notAuthentic('This document is not signed by VSP');
+    }
+    const list = Array.isArray(globalThis.simopsTrustedKeys) ? globalThis.simopsTrustedKeys : [];
+    const trusted = list.find(k => k && k.kid === record.kid && k.alg === 'ES256' && k.jwk && k.jwk.kty === 'EC' && k.jwk.crv === 'P-256');
+    if (!trusted) throw notAuthentic('The document is signed with a key this site does not trust');
+    // The key must be for the document's environment, and the document for the environment of this page
+    // (prod, or dev when the page was opened with ?flavor=dev). The page announces its own; none means no trust.
+    const site = globalThis.simopsSiteEnvironment;
+    if (site !== 'prod' && site !== 'dev') throw notAuthentic('This page does not know its SIMOPS environment');
+    if (document.environment !== trusted.environment || document.environment !== site) {
+      throw notAuthentic('The document belongs to another SIMOPS environment');
+    }
+    let valid = false;
+    try {
+      const raw = bytes(record.sig);
+      const key = await crypto.subtle.importKey('jwk', { kty: 'EC', crv: 'P-256', x: trusted.jwk.x, y: trusted.jwk.y, ext: true },
+        { name: 'ECDSA', namedCurve: 'P-256' }, false, ['verify']);
+      const { vspSignature, ...rest } = document;
+      valid = raw.length === 64 && await crypto.subtle.verify({ name: 'ECDSA', hash: 'SHA-256' }, key, raw,
+        new TextEncoder().encode(purpose + '\n' + canonical(rest)));
+    } catch { valid = false; }
+    if (!valid) throw notAuthentic('The VSP signature of this document is not valid');
+    return trusted;
+  }
+  // A signature receipt: what the SIMOPS server says became of one signature. Returns the verified receipt as JSON.
+  async function verifyReceipt(raw) {
+    const r = JSON.parse(raw);
+    if (r.v !== 1 || r.kind !== 'simops-signature-receipt') throw notAuthentic('This is not a signature receipt');
+    await verifyVspSignature(RECEIPT_PURPOSE, r);
+    return JSON.stringify(r);
+  }
   async function validate(raw) {
     const r = JSON.parse(raw);
     if (r.v !== 1 || !['enroll', 'approve', 'add', 'replace', 'remove', 'recover', 'login'].includes(r.kind)
         || r.origin !== location.origin || r.rpId !== location.hostname) throw Error('Invalid signing site or request');
+    // Authenticity first: nothing about an unsigned or forged invitation is shown or acted on.
+    await verifyVspSignature(INVITATION_PURPOSE, r);
     if (!Number.isFinite(Date.parse(r.expiresAt)) || Date.now() >= Date.parse(r.expiresAt)) throw Error('Invitation expired');
-    const { challenge, ...bound } = r;
+    const { challenge, vspSignature, ...bound } = r;
     if (await hash(canonical(bound)) !== challenge) throw Error('Invitation content was changed');
     if (!globalThis.isSecureContext || !navigator.credentials) throw Error('A secure browser with passkey support is required');
     return r;
@@ -268,8 +311,8 @@
     }
     return false;
   }
-  const api = { read, compact, discover, validate: async raw => { await validate(raw); return raw; }, sign, registerPasskey,
+  const api = { read, compact, discover, validate: async raw => { await validate(raw); return raw; }, verifyReceipt, sign, registerPasskey,
     createRegistrationPasskey, confirmRegistrationPasskey, newPasskeyChange, authorizePasskeyChange, deliver };
   globalThis.simopsSigning = api;
-  if (typeof module !== 'undefined') module.exports = { ...api, canonical, hash, authorizationChallenge };
+  if (typeof module !== 'undefined') module.exports = { ...api, canonical, hash, authorizationChallenge, verifyVspSignature };
 })();

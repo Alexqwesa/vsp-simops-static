@@ -1,11 +1,15 @@
 # Deploy the optional Cloudflare signing relay
 
-The private SIMOPS server encrypts each invitation with AES-256-GCM before sending
-it to a Worker. The signing link's fragment carries the mailbox capability and
-decryption key. The Worker stores ciphertext, a token hash, expiry and status;
-it does not receive the encryption key or plaintext SIMOPS. Treat invitation links
-as private. Only the intranet server validates and records approvals. The Worker
-cannot approve a SIMOPS by setting a status.
+The private SIMOPS server **signs** every invitation with its own key and sends it to
+a Worker as plain JSON. Cloudflare is trusted with the content of these short-lived
+documents (see "SIMOPS document security" in
+[relay-arch.md](../cloudflare/signing-relay/relay-arch.md)); what protects authenticity is
+the VSP signature, which the static site verifies with a public key shipped in its own
+files. The signing link's fragment carries only the mailbox id and an access token: whoever
+has the link can open that one SIMOPS, so treat invitation links as private. The Worker
+stores the signed invitation, a token hash, expiry and status. Only the intranet server
+validates and records approvals. The Worker cannot approve a SIMOPS by setting a status,
+and it cannot forge or change an invitation or a receipt: it has no signing key.
 
 External approvals are polled about once a minute and pass the existing assignment,
 document hash/version, passkey, expiry, revocation and replay checks. External first
@@ -60,14 +64,42 @@ Add these entries to its existing `.env`, then restart the server:
 SIMOPS_RELAY_URL=https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev
 SIMOPS_RELAY_API_KEY=YOUR_SAME_RANDOM_SECRET
 SIMOPS_RELAY_ENCRYPTION_KEY=ANOTHER_RANDOM_SECRET_KEPT_ONLY_ON_THE_PRIVATE_SERVER
+SIMOPS_ENVIRONMENT=prod
+SIMOPS_DOCUMENT_SIGNING_KID=prod-2026-1
+SIMOPS_DOCUMENT_SIGNING_KEY=PRIVATE_KEY_FROM_THE_GENERATOR_SEE_BELOW
 SIMOPS_EXTERNAL_SIGNING_PAGE=https://alexqwesa.github.io/vsp-simops-static/external-signing.html
 SIMOPS_APP_RETURN_ORIGINS=https://softapp.vietsov.com.vn:1810,https://simops.vietsov.com.vn
 ```
 
 Generate `SIMOPS_RELAY_ENCRYPTION_KEY` independently, with at least 32 random
 characters (prefer 32 random bytes encoded as hex). Never send it to Cloudflare.
-It derives the per-request encryption keys and capabilities. The API secret alone
-cannot decrypt stored invitations. Back up both secrets in your server secret store.
+It derives the mailbox ids and link tokens, so that the same request always gets the same
+ones; it is no longer an encryption key for documents. Back up both secrets in your
+server secret store.
+
+### The VSP document signing key
+
+The server refuses to issue an invitation without it (it never issues unsigned ones).
+Create the pair once per environment:
+
+```sh
+cd vsp_dsno_server
+dart run lib/tools/gen_document_signing_key.dart prod-2026-1 prod     # kid, environment (prod or dev)
+```
+
+* The three `SIMOPS_*` lines it prints go into the server's secret environment. The private
+  key never leaves the server and is never committed or sent to Cloudflare.
+  `SIMOPS_ENVIRONMENT` is `prod` or `dev`; it is signed into every invitation and receipt.
+* The `{ kid, environment, alg, jwk }` entry it prints goes into
+  `vsp_dsno_flutter/web/vsp-trusted-keys.js` and is deployed with the static site. A production
+  site lists only `prod` keys, a development site `dev` keys. The site never loads keys from the
+  relay.
+* **Rotation:** generate a new key with a new `kid`, add it to `vsp-trusted-keys.js`, deploy the
+  site, then switch the server to the new key. Keep the old entry until every invitation signed
+  with it has expired (21 days at most), then remove it. A lost or leaked private key: remove its
+  entry from the site and deploy at once; invitations signed with it stop being accepted.
+* The key also signs **receipts** (what became of a signature). A worker can prove a signature
+  from the receipt alone, without the relay.
 
 Use the Worker origin only for `SIMOPS_RELAY_URL`. The server needs outbound HTTPS
 to Cloudflare; no public inbound access to the intranet server is required. Existing
@@ -86,11 +118,20 @@ that target repository. This setup does not deploy your Worker automatically.
 ## Storage and expiry
 
 Cloudflare is not an archive. The Worker rejects expired access immediately, caps
-mailbox lifetimes at eight days, and deletes expired rows hourly. Actual server
-requests may be shorter (five minutes for self-service, seven days for external
-requests). After successful server acknowledgement it clears invitation and
-response ciphertext, retaining status metadata until expiry. If acknowledgement
-fails, expiry cleanup is the fallback. Rejected responses remain until expiry.
+mailbox and inbox lifetimes at **21 days**, and deletes expired rows hourly. Actual server
+requests are shorter (five minutes for self-service, seven days for external requests).
+The document copy is removed:
+
+* when the signature is verified (the signer's own mailbox only: other signers' invitations
+  of the same SIMOPS stay independent),
+* when VSP revokes the invitation (the server tells the relay at once),
+* at expiry, in every state, within 21 days at most.
+
+What stays after a signature is verified, a revocation or a rejection is only the **status
+metadata** for about a year: the mailbox id, the status, the signing time, the hash of the
+link token and the receipt the SIMOPS server signed. The status endpoint never returns the
+deleted document. If an acknowledgement fails, expiry cleanup is the fallback. A rejected
+response keeps its invitation readable until expiry.
 
 D1 also has provider-managed [Time Travel backups](https://developers.cloudflare.com/d1/reference/time-travel/).
 Deleting active rows is **not** a promise of immediate physical removal from all
@@ -98,9 +139,11 @@ provider backups; backup retention follows the Cloudflare plan. Never use the re
 as a permanent document store. Users should export SIMOPS JSON and back it up;
 browser local history can be cleared or evicted.
 
-Rotating the server-only encryption secret changes derived mailbox IDs, tokens and keys. Existing
+Rotating the server-only encryption secret changes derived mailbox IDs and tokens. Existing
 relay links will no longer be retrieved by the server; finish outstanding requests
-first or issue new invitations afterwards. Offline response imports still use the
+first or issue new invitations afterwards. Links issued before documents became plain
+signed JSON still carry an AES key; they keep working until they expire (the server
+derives that key from the same secret to open their responses), so keep the secret until then. Offline response imports still use the
 server's signing request records and validation rules.
 
 ## Registration mailbox
@@ -137,18 +180,28 @@ so no emailed link is needed.
   invitation leaves the inbox; expired entries and challenges are removed by the cron.
 
 **What Cloudflare can read.** An inbox entry holds the same invitation link that the
-email carries, and that link contains the key that decrypts the invitation (the review
-copy of the SIMOPS with only that signer's slot). Whoever administers the Cloudflare
-account can therefore read invitations that wait in an inbox. If that is not acceptable,
-do not enable the inbox: the server then simply does not need the `assignments` calls.
+email carries (the review copy of the SIMOPS with only that signer's slot). Whoever
+administers the Cloudflare account can read invitations that wait there; that is the accepted
+trade-off for short-lived operational documents. A copy someone altered is still refused: the
+static site verifies the VSP signature. If this is not acceptable, do not enable the inbox: the
+server then simply does not need the `assignments` calls.
 
-Upgrade steps: apply the schema again (it only adds tables), deploy the Worker, then
-restart the SIMOPS server so it syncs the passkeys.
+Access model: an emailed link opens that one SIMOPS (the link's token is the credential); the
+inbox and the list of the signer's passkeys need a WebAuthn proof from any active passkey of that
+signer; signing needs a registered passkey and the server's final check; a signature receipt can
+be checked without a passkey. Knowing one link never reveals another signer's SIMOPS.
+
+Setting up (or starting over): there is **no data migration**. A relay that never existed needs
+only `schema.sql`. A relay created by an earlier version is reset first (everything in it is
+short-lived and comes back by itself):
 
 ```sh
+npx wrangler d1 execute simops-signing-relay --remote --file schema-reset.sql   # only to start over
 npx wrangler d1 execute simops-signing-relay --remote --file schema.sql
 npx wrangler deploy
 ```
+
+Then restart the SIMOPS server so it syncs the passkeys.
 
 Invitations issued before the upgrade are not in anybody's inbox; their emailed links
 still work. Passkeys must be discoverable to be found without a username. New passkeys are
