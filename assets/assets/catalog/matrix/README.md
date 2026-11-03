@@ -1,6 +1,6 @@
 Approved SIMOPS matrix snapshots are exported here as `<id>.json` by
 `dart run tool/sync_matrix_assets.dart`. Review each export and pin its printed
-SHA-256 in `lib/simops_matrix_screen/matrix_asset_hashes.dart` before publishing.
+SHA-256 in `lib/catalog/matrix_asset_hashes.dart` before publishing.
 The asset is an envelope containing a sanitized matrix. An authenticated
 export also includes the work-type catalog. A raw `SimopsMatrixVersion` dump
 is accepted as local input by `dart tool/import_raw_matrix.dart <matrix-path>

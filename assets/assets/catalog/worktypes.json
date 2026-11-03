@@ -1,0 +1,3146 @@
+[
+  {
+    "__className__": "WorkType",
+    "id": 1,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "LIFTING_WELLHEAD",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 1,
+        "workTypeId": 1,
+        "lang": 2,
+        "name": "Грузоподъемные операции в зоне устьев скважин",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 2,
+        "workTypeId": 1,
+        "lang": 1,
+        "name": "Hoạt động nâng hạ trong khu vực miệng giếng khoan",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 3,
+        "workTypeId": 1,
+        "lang": 0,
+        "name": "Lifting operations in the wellhead area",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.343293Z",
+    "updatedAt": "2025-11-28T09:13:23.343293Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 2,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "WELLHEAD_PT",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 4,
+        "workTypeId": 2,
+        "lang": 2,
+        "name": "Проведение опрессовок устьевого оборудования",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 5,
+        "workTypeId": 2,
+        "lang": 1,
+        "name": "Ép thử áp suất thiết bị đầu giếng",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 6,
+        "workTypeId": 2,
+        "lang": 0,
+        "name": "Pressure testing of wellhead equipment",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.363968Z",
+    "updatedAt": "2025-11-28T09:13:23.363968Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 3,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "WELLHEAD_INSTALL",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 7,
+        "workTypeId": 3,
+        "lang": 2,
+        "name": "Оборудование устья скважины",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 8,
+        "workTypeId": 3,
+        "lang": 1,
+        "name": "Lắp đặt/ kết nối thiết bị đầu giếng",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 9,
+        "workTypeId": 3,
+        "lang": 0,
+        "name": "Install/connect wellhead equipment",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.381513Z",
+    "updatedAt": "2025-11-28T09:13:23.381513Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 4,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "WELL_INTERVENTION",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 10,
+        "workTypeId": 4,
+        "lang": 2,
+        "name": "Внутрискважинные работы",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 11,
+        "workTypeId": 4,
+        "lang": 1,
+        "name": "Công việc trong giếng khoan",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 12,
+        "workTypeId": 4,
+        "lang": 0,
+        "name": "Well interventions",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.400058Z",
+    "updatedAt": "2025-11-28T09:13:23.400058Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 5,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "PRODUCTION",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 13,
+        "workTypeId": 5,
+        "lang": 2,
+        "name": "Добыча",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 14,
+        "workTypeId": 5,
+        "lang": 1,
+        "name": "Khai thác",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 15,
+        "workTypeId": 5,
+        "lang": 0,
+        "name": "Production",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.418338Z",
+    "updatedAt": "2025-11-28T09:13:23.418338Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 6,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "WELL_KILL",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 16,
+        "workTypeId": 6,
+        "lang": 2,
+        "name": "Глушение скважины",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 17,
+        "workTypeId": 6,
+        "lang": 1,
+        "name": "Dập giếng",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 18,
+        "workTypeId": 6,
+        "lang": 0,
+        "name": "Well kill",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.435898Z",
+    "updatedAt": "2025-11-28T09:13:23.435898Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 7,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "DEPRESS_PIPING_ANNULUS",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 19,
+        "workTypeId": 7,
+        "lang": 2,
+        "name": "Стравливание давления в тех. трубопроводах и МКП",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 20,
+        "workTypeId": 7,
+        "lang": 1,
+        "name": "Xả áp suất trong đường ống công nghệ và khoảng không vành xuyến",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 21,
+        "workTypeId": 7,
+        "lang": 0,
+        "name": "Depressurizing process piping and annulus",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.453401Z",
+    "updatedAt": "2025-11-28T09:13:23.453401Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 8,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "SAMPLING",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 22,
+        "workTypeId": 8,
+        "lang": 2,
+        "name": "Отбор проб",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 23,
+        "workTypeId": 8,
+        "lang": 1,
+        "name": "Lấy mẫu",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 24,
+        "workTypeId": 8,
+        "lang": 0,
+        "name": "Sampling",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.470912Z",
+    "updatedAt": "2025-11-28T09:13:23.470912Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 9,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "PROCESS_STARTUP",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 25,
+        "workTypeId": 9,
+        "lang": 2,
+        "name": "Запуск технологического комплекса",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 26,
+        "workTypeId": 9,
+        "lang": 1,
+        "name": "Khởi động tổ hợp công nghệ",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 27,
+        "workTypeId": 9,
+        "lang": 0,
+        "name": "Process complex start-up",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.488310Z",
+    "updatedAt": "2025-11-28T09:13:23.488310Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 10,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "PROCESS_SHUTDOWN",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 28,
+        "workTypeId": 10,
+        "lang": 2,
+        "name": "Остановка технологического комплекса",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 29,
+        "workTypeId": 10,
+        "lang": 1,
+        "name": "Dừng tổ hợp công nghệ",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 30,
+        "workTypeId": 10,
+        "lang": 0,
+        "name": "Process complex shutdown",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.505822Z",
+    "updatedAt": "2025-11-28T09:13:23.505822Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 11,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "WELL_FLOWBACK",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 31,
+        "workTypeId": 11,
+        "lang": 2,
+        "name": "Работы по освоению скважин",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 32,
+        "workTypeId": 11,
+        "lang": 1,
+        "name": "Công việc gọi dòng giếng khai thác",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 33,
+        "workTypeId": 11,
+        "lang": 0,
+        "name": "Well clean-up / flowback",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.522782Z",
+    "updatedAt": "2025-11-28T09:13:23.522782Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 12,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "HOTWORK_HAZARDOUS",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 34,
+        "workTypeId": 12,
+        "lang": 2,
+        "name": "Огневые работы в опасных зонах",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 35,
+        "workTypeId": 12,
+        "lang": 1,
+        "name": "Công việc sinh lửa trong khu vực nguy hiểm",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 36,
+        "workTypeId": 12,
+        "lang": 0,
+        "name": "Hot work in hazardous areas",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.540737Z",
+    "updatedAt": "2025-11-28T09:13:23.540737Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 13,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "HOTWORK_WELLHEAD",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 37,
+        "workTypeId": 13,
+        "lang": 2,
+        "name": "Огневые работы в зоне устьев скважин",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 38,
+        "workTypeId": 13,
+        "lang": 1,
+        "name": "Công việc sinh lửa trong khu vực miệng giếng khoan",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 39,
+        "workTypeId": 13,
+        "lang": 0,
+        "name": "Hot work at the wellhead area",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.558515Z",
+    "updatedAt": "2025-11-28T09:13:23.558515Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 14,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "HOTWORK_WELD_STATION",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 40,
+        "workTypeId": 14,
+        "lang": 2,
+        "name": "Огневые работы на стационарном сварочном посту",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 41,
+        "workTypeId": 14,
+        "lang": 1,
+        "name": "Công việc sinh lửa tại trạm hàn cố định",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 42,
+        "workTypeId": 14,
+        "lang": 0,
+        "name": "Hot work at fixed welding station",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.576061Z",
+    "updatedAt": "2025-11-28T09:13:23.576061Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 15,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "HOTWORK_OPEN_DECK",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 43,
+        "workTypeId": 15,
+        "lang": 2,
+        "name": "Огневые работы на открытой палубе",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 44,
+        "workTypeId": 15,
+        "lang": 1,
+        "name": "Công việc sinh lửa trên boong mở",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 45,
+        "workTypeId": 15,
+        "lang": 0,
+        "name": "Hot work on open deck",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.594063Z",
+    "updatedAt": "2025-11-28T09:13:23.594063Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 16,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "CONFINED_SPACE",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 46,
+        "workTypeId": 16,
+        "lang": 2,
+        "name": "Работы в замкнутых пространствах",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 47,
+        "workTypeId": 16,
+        "lang": 1,
+        "name": "Công việc trong không gian hạn chế",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 48,
+        "workTypeId": 16,
+        "lang": 0,
+        "name": "Confined space work",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.611497Z",
+    "updatedAt": "2025-11-28T09:13:23.611497Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 17,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "GAS_HAZARD",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 49,
+        "workTypeId": 17,
+        "lang": 2,
+        "name": "Газоопасные работы",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 50,
+        "workTypeId": 17,
+        "lang": 1,
+        "name": "Công việc nguy hiểm khí",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 51,
+        "workTypeId": 17,
+        "lang": 0,
+        "name": "Gas-hazardous work",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.629644Z",
+    "updatedAt": "2025-11-28T09:13:23.629644Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 18,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "WORK_AT_HEIGHT",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 52,
+        "workTypeId": 18,
+        "lang": 2,
+        "name": "Работы на высоте",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 53,
+        "workTypeId": 18,
+        "lang": 1,
+        "name": "Công việc trên cao",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 54,
+        "workTypeId": 18,
+        "lang": 0,
+        "name": "Work at height",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.646730Z",
+    "updatedAt": "2025-11-28T09:13:23.646730Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 19,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "PRODUCTION_PT",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 55,
+        "workTypeId": 19,
+        "lang": 2,
+        "name": "Опрессовки эксплуатационного оборудования.",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 56,
+        "workTypeId": 19,
+        "lang": 1,
+        "name": "Ép thử áp suất thiết bị khai thác",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 57,
+        "workTypeId": 19,
+        "lang": 0,
+        "name": "Pressure testing of production equipment",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.664677Z",
+    "updatedAt": "2025-11-28T09:13:23.664677Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 20,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "FIRE_GAS_DET_MAINT",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 58,
+        "workTypeId": 20,
+        "lang": 2,
+        "name": "Обслуживание пожарной и газовой сигнализации",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 59,
+        "workTypeId": 20,
+        "lang": 1,
+        "name": "Bảo dưỡng hệ thống báo cháy và báo rò rỉ khí",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 60,
+        "workTypeId": 20,
+        "lang": 0,
+        "name": "Maintenance of fire & gas detection",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.682232Z",
+    "updatedAt": "2025-11-28T09:13:23.682232Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 21,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "FIREFIGHTING_MAINT",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 61,
+        "workTypeId": 21,
+        "lang": 2,
+        "name": "Обслуживание системы пожаротушения",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 62,
+        "workTypeId": 21,
+        "lang": 1,
+        "name": "Bảo dưỡng hệ thống chữa cháy",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 63,
+        "workTypeId": 21,
+        "lang": 0,
+        "name": "Maintenance of firefighting system",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.700232Z",
+    "updatedAt": "2025-11-28T09:13:23.700232Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 22,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "CORR_PROT",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 64,
+        "workTypeId": 22,
+        "lang": 2,
+        "name": "АКР, АКП",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 65,
+        "workTypeId": 22,
+        "lang": 1,
+        "name": "Công việc chống ăn mòn",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 66,
+        "workTypeId": 22,
+        "lang": 0,
+        "name": "Corrosion protection works",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.717707Z",
+    "updatedAt": "2025-11-28T09:13:23.717707Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 23,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "VESSEL_CARGO_OPS",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 67,
+        "workTypeId": 23,
+        "lang": 2,
+        "name": "Грузовые операции с судном",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 68,
+        "workTypeId": 23,
+        "lang": 1,
+        "name": "Hoạt động bốc dỡ hàng với tàu",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 69,
+        "workTypeId": 23,
+        "lang": 0,
+        "name": "Cargo operations with vessel",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.735991Z",
+    "updatedAt": "2025-11-28T09:13:23.735991Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 24,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "HOSE_DIESEL",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 70,
+        "workTypeId": 24,
+        "lang": 2,
+        "name": "Шланговые операции/прием ДТ",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 71,
+        "workTypeId": 24,
+        "lang": 1,
+        "name": "Công việc với ống mềm / nhận nhiên liệu diesel",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 72,
+        "workTypeId": 24,
+        "lang": 0,
+        "name": "Hose operations / diesel receipt",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.753473Z",
+    "updatedAt": "2025-11-28T09:13:23.753473Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 25,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "CRANE_PERSONNEL_TRANSFER",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 73,
+        "workTypeId": 25,
+        "lang": 2,
+        "name": "Пересадка персонала  краном",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 74,
+        "workTypeId": 25,
+        "lang": 1,
+        "name": "Chuyển người bằng cẩu",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 75,
+        "workTypeId": 25,
+        "lang": 0,
+        "name": "Personnel transfer by crane",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.771478Z",
+    "updatedAt": "2025-11-28T09:13:23.771478Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 26,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "DRILLS_TRAINING",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 76,
+        "workTypeId": 26,
+        "lang": 2,
+        "name": "Учебно-тренировочные занятия",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 77,
+        "workTypeId": 26,
+        "lang": 1,
+        "name": "Thực tập - diễn tập",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 78,
+        "workTypeId": 26,
+        "lang": 0,
+        "name": "Drills and trainings",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.789211Z",
+    "updatedAt": "2025-11-28T09:13:23.789211Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 27,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "PERFORATION",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 79,
+        "workTypeId": 27,
+        "lang": 2,
+        "name": "Прострелочные работы",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 80,
+        "workTypeId": 27,
+        "lang": 1,
+        "name": "Công việc bắn nổ mìn",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 81,
+        "workTypeId": 27,
+        "lang": 0,
+        "name": "Perforation operations",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.806754Z",
+    "updatedAt": "2025-11-28T09:13:23.806754Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 28,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "HELICOPTER_OPS",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 82,
+        "workTypeId": 28,
+        "lang": 2,
+        "name": "Вертолётные операции",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 83,
+        "workTypeId": 28,
+        "lang": 1,
+        "name": "Hoạt động trực thăng",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 84,
+        "workTypeId": 28,
+        "lang": 0,
+        "name": "Helicopter operations",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.824989Z",
+    "updatedAt": "2025-11-28T09:13:23.824989Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 29,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "CRANE_OPS",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 85,
+        "workTypeId": 29,
+        "lang": 2,
+        "name": "Работа  крана",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 86,
+        "workTypeId": 29,
+        "lang": 1,
+        "name": "Công việc của cẩu",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 87,
+        "workTypeId": 29,
+        "lang": 0,
+        "name": "Crane operations",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.842486Z",
+    "updatedAt": "2025-11-28T09:13:23.842486Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 30,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "CT_OPS_SV",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 88,
+        "workTypeId": 30,
+        "lang": 2,
+        "name": "Работа гибкой НКТ с ТБС",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 89,
+        "workTypeId": 30,
+        "lang": 1,
+        "name": "Công việc sử dụng ống mềm (coiled tubing) bằng tàu dịch vụ",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 90,
+        "workTypeId": 30,
+        "lang": 0,
+        "name": "Coiled tubing operations using service vessel",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.859962Z",
+    "updatedAt": "2025-11-28T09:13:23.859962Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 31,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "ACIDIZING_SV",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 91,
+        "workTypeId": 31,
+        "lang": 2,
+        "name": "Проведение кислотных обработок с ТБС",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 92,
+        "workTypeId": 31,
+        "lang": 1,
+        "name": "Xử lý axit bằng tàu dịch vụ",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 93,
+        "workTypeId": 31,
+        "lang": 0,
+        "name": "Acidizing using service vessel",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.877654Z",
+    "updatedAt": "2025-11-28T09:13:23.877654Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 32,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "ACIDIZING_PLATFORM",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 94,
+        "workTypeId": 32,
+        "lang": 2,
+        "name": "Проведение кислотных обработок с МСП/БК (без ТБС)",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 95,
+        "workTypeId": 32,
+        "lang": 1,
+        "name": "Xử lý axit trên MSP/BK (không sử dụng tàu dịch vụ)",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 96,
+        "workTypeId": 32,
+        "lang": 0,
+        "name": "Acidizing on MSP/BK (no service vessel)",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.895271Z",
+    "updatedAt": "2025-11-28T09:13:23.895271Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 33,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "FRAC",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 97,
+        "workTypeId": 33,
+        "lang": 2,
+        "name": "ГРП",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 98,
+        "workTypeId": 33,
+        "lang": 1,
+        "name": "Nứt vỉa thủy lực (Hydraulic Fracturing)",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 99,
+        "workTypeId": 33,
+        "lang": 0,
+        "name": "Hydraulic fracturing",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.912976Z",
+    "updatedAt": "2025-11-28T09:13:23.912976Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 34,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "PIGGING_LAUNCH_RECEIVE",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 100,
+        "workTypeId": 34,
+        "lang": 2,
+        "name": "Прием /запуск поршней ВТО",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 101,
+        "workTypeId": 34,
+        "lang": 1,
+        "name": "Phóng/ nhận thoi làm sạch bên trong đường ống",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 102,
+        "workTypeId": 34,
+        "lang": 0,
+        "name": "Pipeline pig launch/receive",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.934001Z",
+    "updatedAt": "2025-11-28T09:13:23.934001Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 35,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "DRAIN_OIL_GAS_OPEN_TANK",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 103,
+        "workTypeId": 35,
+        "lang": 2,
+        "name": "Дренирование нефти и газа в открытую дренажную емкость",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 104,
+        "workTypeId": 35,
+        "lang": 1,
+        "name": "Xả dầu và khí vào bể xả hở",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 105,
+        "workTypeId": 35,
+        "lang": 0,
+        "name": "Draining oil & gas to open drain tank",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.952232Z",
+    "updatedAt": "2025-11-28T09:13:23.952232Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 36,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "WELD_RT_NDT",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 106,
+        "workTypeId": 36,
+        "lang": 2,
+        "name": "Проведение рентгенографии сварных швов (NDT)",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 107,
+        "workTypeId": 36,
+        "lang": 1,
+        "name": "Chụp phim mối hàn (NDT)",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 108,
+        "workTypeId": 36,
+        "lang": 0,
+        "name": "Radiographic testing of welds (NDT)",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.969942Z",
+    "updatedAt": "2025-11-28T09:13:23.969942Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 37,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "RIG_APPROACH_PLATFORM",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 109,
+        "workTypeId": 37,
+        "lang": 2,
+        "name": "Подход буровой установки к платформе",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 110,
+        "workTypeId": 37,
+        "lang": 1,
+        "name": "Giàn khoan cập vào giàn khai thác",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 111,
+        "workTypeId": 37,
+        "lang": 0,
+        "name": "Drilling rig approach to platform",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:23.987511Z",
+    "updatedAt": "2025-11-28T09:13:23.987511Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 38,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "ANCHOR_INSTALL",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 112,
+        "workTypeId": 38,
+        "lang": 2,
+        "name": "Установка якорей",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 113,
+        "workTypeId": 38,
+        "lang": 1,
+        "name": "Thả neo",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 114,
+        "workTypeId": 38,
+        "lang": 0,
+        "name": "Anchor installation",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.004922Z",
+    "updatedAt": "2025-11-28T09:13:24.004922Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 39,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "JACKUP_JACKING",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 115,
+        "workTypeId": 39,
+        "lang": 2,
+        "name": "Подъем и спуск на воду СПБУ",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 116,
+        "workTypeId": 39,
+        "lang": 1,
+        "name": "Công tác nâng hạ Tàu khoan tự nâng",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 117,
+        "workTypeId": 39,
+        "lang": 0,
+        "name": "Jack-up rig jacking operations",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.022017Z",
+    "updatedAt": "2025-11-28T09:13:24.022017Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 40,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "CANTILEVER_MOVE",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 118,
+        "workTypeId": 40,
+        "lang": 2,
+        "name": "Передвижение кантеливера",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 119,
+        "workTypeId": 40,
+        "lang": 1,
+        "name": "Di chuyển cantilever",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 120,
+        "workTypeId": 40,
+        "lang": 0,
+        "name": "Cantilever movement",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.039608Z",
+    "updatedAt": "2025-11-28T09:13:24.039608Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 41,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "CONDUCTOR_INSTALL",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 121,
+        "workTypeId": 41,
+        "lang": 2,
+        "name": "Установка ВОК",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 122,
+        "workTypeId": 41,
+        "lang": 1,
+        "name": "Chống ống cách nước",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 123,
+        "workTypeId": 41,
+        "lang": 0,
+        "name": "Install water-isolating casing (conductor)",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.056860Z",
+    "updatedAt": "2025-11-28T09:13:24.056860Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 42,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "TOP_HOLE_DRILLING",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 124,
+        "workTypeId": 42,
+        "lang": 2,
+        "name": "Бурение верхнего интервала",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 125,
+        "workTypeId": 42,
+        "lang": 1,
+        "name": "Khoan khoảng trên cùng",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 126,
+        "workTypeId": 42,
+        "lang": 0,
+        "name": "Drilling the top-hole section",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.074397Z",
+    "updatedAt": "2025-11-28T09:13:24.074397Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 43,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "STANDS_MAKEUP",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 127,
+        "workTypeId": 43,
+        "lang": 2,
+        "name": "Сборка свечей",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 128,
+        "workTypeId": 43,
+        "lang": 1,
+        "name": "Ráp cần khoan",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 129,
+        "workTypeId": 43,
+        "lang": 0,
+        "name": "Stand building (making up drill stands)",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.091336Z",
+    "updatedAt": "2025-11-28T09:13:24.091336Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 44,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "DRILLING",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 130,
+        "workTypeId": 44,
+        "lang": 2,
+        "name": "Бурение",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 131,
+        "workTypeId": 44,
+        "lang": 1,
+        "name": "Khoan",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 132,
+        "workTypeId": 44,
+        "lang": 0,
+        "name": "Drilling",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.109Z",
+    "updatedAt": "2025-11-28T09:13:24.109Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 45,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "CASING_BOP_PT",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 133,
+        "workTypeId": 45,
+        "lang": 2,
+        "name": "Опрессовка колонны / ПВО",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 134,
+        "workTypeId": 45,
+        "lang": 1,
+        "name": "Ép ống chống / đối áp (thiết bị chống phun)",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 135,
+        "workTypeId": 45,
+        "lang": 0,
+        "name": "Casing / BOP pressure test",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.126509Z",
+    "updatedAt": "2025-11-28T09:13:24.126509Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 46,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "RUN_CASING",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 136,
+        "workTypeId": 46,
+        "lang": 2,
+        "name": "Спуск обсадной колонны",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 137,
+        "workTypeId": 46,
+        "lang": 1,
+        "name": "Thả ống chống",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 138,
+        "workTypeId": 46,
+        "lang": 0,
+        "name": "Run casing",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.143860Z",
+    "updatedAt": "2025-11-28T09:13:24.143860Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 47,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "CEMENTING",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 139,
+        "workTypeId": 47,
+        "lang": 2,
+        "name": "Цементировочные работы",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 140,
+        "workTypeId": 47,
+        "lang": 1,
+        "name": "Công việc bơm xi măng",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 141,
+        "workTypeId": 47,
+        "lang": 0,
+        "name": "Cementing operations",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.161605Z",
+    "updatedAt": "2025-11-28T09:13:24.161605Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 48,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "BOP_INSTALL_REMOVE",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 142,
+        "workTypeId": 48,
+        "lang": 2,
+        "name": "Монтаж / демонтаж превентора",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 143,
+        "workTypeId": 48,
+        "lang": 1,
+        "name": "Lắp đặt / tháo dỡ đối áp",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 144,
+        "workTypeId": 48,
+        "lang": 0,
+        "name": "Install / remove BOP",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.178641Z",
+    "updatedAt": "2025-11-28T09:13:24.178641Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 49,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "TRIPPING",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 145,
+        "workTypeId": 49,
+        "lang": 2,
+        "name": "Спуско-подъемные операции",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 146,
+        "workTypeId": 49,
+        "lang": 1,
+        "name": "Công việc nâng-hạ trong giếng khoan",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 147,
+        "workTypeId": 49,
+        "lang": 0,
+        "name": "Tripping operations",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.197255Z",
+    "updatedAt": "2025-11-28T09:13:24.197255Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 50,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "FISHING_EMERGENCY",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 148,
+        "workTypeId": 50,
+        "lang": 2,
+        "name": "Аварийные работы (извлечение инструмента)",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 149,
+        "workTypeId": 50,
+        "lang": 1,
+        "name": "Công việc sự cố (cứu kẹt thiết bị)",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 150,
+        "workTypeId": 50,
+        "lang": 0,
+        "name": "Fishing operations (emergency)",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.214872Z",
+    "updatedAt": "2025-11-28T09:13:24.214872Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 51,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "UNDERREAMING",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 151,
+        "workTypeId": 51,
+        "lang": 2,
+        "name": "Расширение ствола скважины",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 152,
+        "workTypeId": 51,
+        "lang": 1,
+        "name": "Mở rộng giếng khoan",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 153,
+        "workTypeId": 51,
+        "lang": 0,
+        "name": "Hole enlargement (underreaming)",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.233437Z",
+    "updatedAt": "2025-11-28T09:13:24.233437Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 52,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "RUN_COMPLETION_EQUIP",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 154,
+        "workTypeId": 52,
+        "lang": 2,
+        "name": "Спуск ВСО скважины",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 155,
+        "workTypeId": 52,
+        "lang": 1,
+        "name": "Thả thiết bị khai thác trong giếng khoan",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 156,
+        "workTypeId": 52,
+        "lang": 0,
+        "name": "Run completion equipment in well",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:24.251467Z",
+    "updatedAt": "2025-11-28T09:13:24.251467Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  {
+    "__className__": "WorkType",
+    "id": 55,
+    "code": "OIL_OFFLOAD_FUEL_RECEIVE",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 163,
+        "workTypeId": 55,
+        "lang": 2,
+        "name": "Отгрузка нефти/прием мазута",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 164,
+        "workTypeId": 55,
+        "lang": 1,
+        "name": "Xuất dầu thô / tiếp nhận dầu mazut",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 165,
+        "workTypeId": 55,
+        "lang": 0,
+        "name": "Oil Offloading / Fuel Oil Receiving",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2026-08-28T03:33:43.618207Z",
+    "updatedAt": "2026-08-28T03:33:43.618207Z",
+    "createdBy": 5707,
+    "updatedBy": 5707
+  },
+  {
+    "__className__": "WorkType",
+    "id": 54,
+    "code": "GAS-COMP",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 160,
+        "workTypeId": 54,
+        "lang": 2,
+        "name": "Компримирование газа",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 161,
+        "workTypeId": 54,
+        "lang": 1,
+        "name": "Hoạt động nén khí gas",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 162,
+        "workTypeId": 54,
+        "lang": 0,
+        "name": "Gas Compression",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2026-03-13T03:23:17.838033Z",
+    "updatedAt": "2026-03-13T03:23:17.838033Z",
+    "createdBy": 5707,
+    "updatedBy": 5707
+  },
+  {
+    "__className__": "WorkType",
+    "id": 56,
+    "code": "TANKER_MOORING",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 166,
+        "workTypeId": 56,
+        "lang": 2,
+        "name": "Швартовые операции с танкером",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 167,
+        "workTypeId": 56,
+        "lang": 1,
+        "name": "Hoạt động neo buộc tàu chở dầu",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 168,
+        "workTypeId": 56,
+        "lang": 0,
+        "name": "Tanker Mooring Operations",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2026-08-28T04:11:20.796538Z",
+    "updatedAt": "2026-08-28T04:11:20.796538Z",
+    "createdBy": 5707,
+    "updatedBy": 5707
+  },
+  {
+    "__className__": "WorkType",
+    "id": 57,
+    "code": "TANK_WASHING",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 169,
+        "workTypeId": 57,
+        "lang": 2,
+        "name": "Мойка танков сырой нефтью и горячей водой",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 170,
+        "workTypeId": 57,
+        "lang": 1,
+        "name": "Rửa két bằng dầu thô và nước nóng",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 171,
+        "workTypeId": 57,
+        "lang": 0,
+        "name": "Tank Washing with Crude Oil / Hot Water",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2026-08-28T04:16:59.465569Z",
+    "updatedAt": "2026-08-28T04:16:59.465569Z",
+    "createdBy": 5707,
+    "updatedBy": 5707
+  },
+  {
+    "__className__": "WorkType",
+    "id": 53,
+    "categoryId": 1,
+    "category": {
+      "__className__": "WorkCategory",
+      "id": 1,
+      "code": "SIMOPS",
+      "sort": 100,
+      "isDeleted": false,
+      "createdAt": "2025-11-28T09:13:23.336409Z",
+      "updatedAt": "2025-11-28T09:13:23.336409Z",
+      "createdBy": 1,
+      "updatedBy": 1
+    },
+    "code": "CUSTOM",
+    "defaultLevelIfMissing": 1,
+    "isCondition": false,
+    "isDeleted": false,
+    "sort": 100,
+    "isHighRisk": false,
+    "isRequirePermission": false,
+    "translations": [
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 157,
+        "workTypeId": 53,
+        "lang": 2,
+        "name": "Другое",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 158,
+        "workTypeId": 53,
+        "lang": 1,
+        "name": "Tùy chỉnh",
+        "shortName": "",
+        "description": ""
+      },
+      {
+        "__className__": "WorkTypeTranslation",
+        "id": 159,
+        "workTypeId": 53,
+        "lang": 0,
+        "name": "Custom",
+        "shortName": "",
+        "description": ""
+      }
+    ],
+    "createdAt": "2025-11-28T09:13:29.610851Z",
+    "updatedAt": "2026-05-05T01:06:58.110834Z",
+    "createdBy": 1,
+    "updatedBy": 1
+  }
+]
