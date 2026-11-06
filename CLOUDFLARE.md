@@ -143,7 +143,8 @@ Rotating the server-only encryption secret changes derived mailbox IDs and token
 relay links will no longer be retrieved by the server; finish outstanding requests
 first or issue new invitations afterwards. Links issued before documents became plain
 signed JSON still carry an AES key; they keep working until they expire (the server
-derives that key from the same secret to open their responses), so keep the secret until then. Offline response imports still use the
+derives that key from the same secret to open their responses), so keep the secret until then. Offline response imports
+still use the
 server's signing request records and validation rules.
 
 ## Registration mailbox
@@ -215,58 +216,61 @@ Invitations issued before the upgrade are not in anybody's inbox; their emailed 
 still work. Passkeys must be discoverable to be found without a username. New passkeys are
 created that way; an old passkey that the browser cannot offer must be registered again.
 
-## One relay for prod and dev (flavors)
+## Prod and dev relays
 
-Several SIMOPS servers can share one Worker. The Worker takes each server's
-**flavor**, `prod` or `dev`, from the API key it calls with, and keeps passkeys,
-inbox entries and invitation mailboxes per flavor: a server never sees, replaces or
-deletes another flavor's rows. A passkey sync replaces only its own list, and a
-signer ID that exists in both databases gets only its own server's inbox entries.
+Prod and dev each have their own Worker, D1 database and server key, so neither can
+see or change the other's passkeys, inbox entries, invitations, registrations or
+requests. Both run the same code from `cloudflare/signing-relay`.
 
-**Registrations are the exception: they are shared.** Every server imports every
-registration once, so one request can register a person on both (a test
-registration may therefore show up in prod too). Only the `REGISTRATION_OWNER`
-flavor (`prod` in `wrangler.jsonc`) removes a registration from Cloudflare after
-importing it; any other server (dev) only marks it as seen and is not offered it
-again. Until prod uses the relay, registrations stay until they expire after 14
-days (at most 500 waiting, 30 000 bytes each), then the hourly cleanup removes them.
-To fetch new ones immediately instead of waiting for the next poll, press **Sync
-registrations from Cloudflare** on the external signers screen.
+|                   | Prod                                                          | Dev                                                        |
+|-------------------|---------------------------------------------------------------|------------------------------------------------------------|
+| Worker            | `simops-signing-relay`                                        | `simops-signing-relay-dev` (`env.dev` in `wrangler.jsonc`) |
+| D1 database       | `simops-signing-relay`                                        | `simops-signing-relay-dev`                                 |
+| Deploy            | `npm run deploy`                                              | `npm run deploy:dev`                                       |
+| Worker secret     | `RELAY_API_KEY`                                               | `RELAY_API_KEY` (`--env dev`)                              |
+| Server `.env`     | `SIMOPS_RELAY_URL`, `SIMOPS_RELAY_API_KEY` of the prod Worker | the same, of the dev Worker                                |
+| Static site build | `SIMOPS_RELAY_URL`                                            | `SIMOPS_RELAY_URL_DEV`                                     |
 
-| Worker secret | Server `.env` | Flavor |
-|---|---|---|
-| `RELAY_API_KEY` | prod server: `SIMOPS_RELAY_API_KEY` = this value | `prod` |
-| `RELAY_API_KEY_DEV` | dev server: `SIMOPS_RELAY_API_KEY` = this value | `dev` |
-
-Use two different random secrets. The server code is the same for both; only the key
-differs. Leave `RELAY_API_KEY_DEV` unset if you run a single server.
+Use two different random secrets. A registration is imported by the server of the
+Worker it reached, which then removes it from Cloudflare. Until a server polls,
+registrations stay until they expire after 14 days (at most 500 waiting, 30 000 bytes
+each), then the hourly cleanup removes them. To fetch new ones immediately instead of
+waiting for the next poll, press **Sync registrations from Cloudflare** on the
+external signers screen.
 
 The static site is `prod` by default. Opened with **`?flavor=dev`**, for example
-`https://alexqwesa.github.io/vsp-simops-static/?flavor=dev#register`, a page works
-with the dev server: it shows a red **DEV** badge in the top bar, tries no prod
-server directly (dev has none reachable from the internet, so it uses the relay
-only), and the copy/share/email registration links keep `?flavor=dev`. Without it,
-a page first tries the prod servers directly, then the relay. Set the build default
-with `--dart-define=SIMOPS_RELAY_FLAVOR=dev|prod` (the deploy workflow reads the
-repository variable `SIMOPS_RELAY_FLAVOR`, default `prod`). The browser console
-shows the flavor at startup: `SIMOPS build … (staticSite, relay flavor dev)`.
-Local browser history and the user list are shared by both flavors.
+`https://alexqwesa.github.io/vsp-simops-static/?flavor=dev#register`, or served from a
+developer's machine (`flutter run -d chrome` on localhost, or the workstation
+`alsygaev_ts.vietsov.com.vn`, any port), a page works with the dev server: it talks to the
+dev Worker, shows a red **DEV** badge in the top bar, tries no prod server directly,
+and the copy/share/email registration links keep `?flavor=dev`. Without it, a page
+first tries the prod servers directly, then the prod Worker. Set the build default with
+`--dart-define=SIMOPS_RELAY_FLAVOR=dev|prod` (the deploy workflow reads the repository
+variable `SIMOPS_RELAY_FLAVOR`, default `prod`). The browser console shows the flavor
+at startup: `SIMOPS build … (staticSite, relay flavor dev)`. Local browser history and
+the user list are shared by both flavors. Only the dev Worker accepts pages from those
+developer machines, and only a dev SIMOPS server (`SIMOPS_ENVIRONMENT=dev`) accepts the
+passkeys created there, besides those of its own signing page.
 
-Moving a relay created before flavors: the old tables have no flavor column, so
-recreate them. Only registrations still waiting for import are lost; servers
-re-sync passkeys at startup and re-send new invitations.
+Setting up the dev Worker:
 
 ```sh
-npx wrangler d1 execute simops-signing-relay --remote --file schema-reset.sql
-npx wrangler d1 execute simops-signing-relay --remote --file schema.sql
-npx wrangler secret put RELAY_API_KEY_DEV
-npx wrangler deploy
+npx wrangler d1 create simops-signing-relay-dev      # put the printed id in env.dev of wrangler.jsonc
+npx wrangler d1 execute simops-signing-relay-dev --env dev --remote --file schema.sql
+npx wrangler secret put RELAY_API_KEY --env dev
+npm run deploy:dev
 ```
 
-Then set the dev server's `SIMOPS_RELAY_API_KEY` to the `RELAY_API_KEY_DEV` value and
-restart it. `RELAY_API_KEY` is not needed until prod uses the relay: without it the
-prod flavor is simply off. Then create it with a new random value (not the dev one)
-and put it in the prod server's `SIMOPS_RELAY_API_KEY`.
+Moving a relay from the time one Worker served both (a `flavor` column in every
+table, secrets `RELAY_API_KEY` and `RELAY_API_KEY_DEV`): migrate the prod database and
+deploy right after it, then remove the old dev secret. The migration keeps the prod
+rows and all waiting registrations and drops the dev rows.
+
+```sh
+npx wrangler d1 execute simops-signing-relay --remote --file schema-single-flavor.sql
+npm run deploy
+npx wrangler secret delete RELAY_API_KEY_DEV
+```
 
 ## Verify your deployment
 
